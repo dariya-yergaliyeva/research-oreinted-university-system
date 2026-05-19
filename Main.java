@@ -74,8 +74,10 @@ public class Main {
             System.out.println(" 7. View news");
             System.out.println(" 8. Submit tech request");
             System.out.println(" 9. Subscribe to journal");
+            System.out.println("10. Inbox");
+            System.out.println("11. Send message");
             if (student.getResearcherRole() != null) {
-                System.out.println("10. Research actions");
+                System.out.println("12. Research actions");
             }
             System.out.println(" 0. Logout");
             System.out.print("> ");
@@ -111,17 +113,11 @@ public class Main {
                     student.rateTeacher(teachers.get(ti), rating);
                 }
                 case 7 -> viewNews();
-                case 8 -> {
-                    System.out.print("Describe the problem: ");
-                    String desc = sc.nextLine();
-                    TechRequest req = new TechRequest(desc, student);
-                    techSpecialistList().stream().findFirst().ifPresentOrElse(
-                        t -> t.receiveRequest(req),
-                        () -> System.out.println("No tech support available.")
-                    );
-                }
+                case 8 -> submitTechRequest(student);
                 case 9 -> subscribeToJournal(student);
-                case 10 -> {
+                case 10 -> viewInbox(student);
+                case 11 -> composeMessage(student);
+                case 12 -> {
                     if (student.getResearcherRole() != null) researchMenu(student.getResearcherRole());
                 }
                 case 0 -> { return; }
@@ -140,6 +136,9 @@ public class Main {
             System.out.println("3. View supervisor");
             System.out.println("4. View diploma projects");
             System.out.println("5. Add diploma paper");
+            System.out.println("6. Inbox");
+            System.out.println("7. Send message");
+            System.out.println("8. Submit tech request");
             System.out.println("0. Logout");
             System.out.print("> ");
 
@@ -160,6 +159,9 @@ public class Main {
                     gs.getResearcherRole().addPaper(p);
                     gs.addDiplomaProject(p);
                 }
+                case 6 -> viewInbox(gs);
+                case 7 -> composeMessage(gs);
+                case 8 -> submitTechRequest(gs);
                 case 0 -> { return; }
                 default -> System.out.println("Invalid option.");
             }
@@ -177,9 +179,11 @@ public class Main {
             System.out.println("4. Send complaint about student");
             System.out.println("5. Generate course report");
             System.out.println("6. View news");
-            System.out.println("7. Send message to employee");
+            System.out.println("7. Send message");
+            System.out.println("8. Inbox");
+            System.out.println("9. Submit tech request");
             if (teacher.getResearcherRole() != null) {
-                System.out.println("8. Research actions");
+                System.out.println("10. Research actions");
             }
             System.out.println("0. Logout");
             System.out.print("> ");
@@ -200,17 +204,10 @@ public class Main {
                     if (c != null) teacher.generateReport(c);
                 }
                 case 6 -> viewNews();
-                case 7 -> {
-                    List<Employee> emps = employeeList();
-                    printIndexed(emps, e -> e.getFirstName() + " " + e.getLastName());
-                    System.out.print("Choose recipient: ");
-                    int ei = readInt() - 1;
-                    if (!validIdx(ei, emps)) break;
-                    System.out.print("Message: ");
-                    String msg = sc.nextLine();
-                    teacher.sendMessage(emps.get(ei), msg);
-                }
-                case 8 -> { if (teacher.getResearcherRole() != null) researchMenu(teacher.getResearcherRole()); }
+                case 7 -> composeMessage(teacher);
+                case 8 -> viewInbox(teacher);
+                case 9 -> submitTechRequest(teacher);
+                case 10 -> { if (teacher.getResearcherRole() != null) researchMenu(teacher.getResearcherRole()); }
                 case 0 -> { return; }
                 default -> System.out.println("Invalid option.");
             }
@@ -256,17 +253,61 @@ public class Main {
         teacher.sendComplaint(students.get(si), level);
     }
 
+    // ───────────────────────── SHARED HELPERS ─────────────────────────
+
+    private static void viewInbox(User u) {
+        var inbox = u.getInbox();
+        if (inbox.isEmpty()) { System.out.println("Inbox is empty."); return; }
+        System.out.println("=== Inbox (" + inbox.size() + ") ===");
+        for (int i = 0; i < inbox.size(); i++) {
+            var m = inbox.get(i);
+            System.out.println((i+1) + ". From " + m.getSender().getFirstName() + " " + m.getSender().getLastName()
+                    + " [" + m.getDate() + "]: " + m.getContent());
+        }
+    }
+
+    private static void composeMessage(User from) {
+        List<User> recipients = uni.getUsers().stream()
+                .filter(u -> !u.getEmail().equals(from.getEmail()))
+                .collect(Collectors.toList());
+        if (recipients.isEmpty()) { System.out.println("No recipients."); return; }
+        printIndexed(recipients, u -> u.getFirstName() + " " + u.getLastName() + " [" + u.getClass().getSimpleName() + "]");
+        System.out.print("Choose recipient: ");
+        int ri = readInt() - 1;
+        if (!validIdx(ri, recipients)) return;
+        System.out.print("Message: ");
+        String text = sc.nextLine();
+        from.sendMessage(recipients.get(ri), text);
+    }
+
+    private static void submitTechRequest(User from) {
+        System.out.print("Describe the problem: ");
+        String desc = sc.nextLine();
+        TechRequest req = new TechRequest(desc, from);
+        techSpecialistList().stream().findFirst().ifPresentOrElse(
+            t -> { t.receiveRequest(req); System.out.println("Request submitted."); },
+            () -> System.out.println("No tech support available.")
+        );
+    }
+
     // ───────────────────────── ADMIN ─────────────────────────
 
     private static void adminMenu(Admin admin) {
         while (true) {
             System.out.println("\n=== Admin: " + admin.getFirstName() + " ===");
-            System.out.println("1. List all users");
-            System.out.println("2. View system logs");
-            System.out.println("3. Add new student");
-            System.out.println("4. Remove user by email");
-            System.out.println("5. Change user language");
-            System.out.println("0. Logout");
+            System.out.println(" 1. List all users");
+            System.out.println(" 2. View system logs");
+            System.out.println(" 3. Add new user (Student/Teacher/Manager/Tech)");
+            System.out.println(" 4. Remove user by email");
+            System.out.println(" 5. Update user info (name/email/password)");
+            System.out.println(" 6. View user details by email");
+            System.out.println(" 7. View all tech requests");
+            System.out.println(" 8. View all messages between users");
+            System.out.println(" 9. Change user language");
+            System.out.println("10. Inbox");
+            System.out.println("11. Send message");
+            System.out.println("12. Submit tech request");
+            System.out.println(" 0. Logout");
             System.out.print("> ");
 
             switch (readInt()) {
@@ -276,16 +317,7 @@ public class Main {
                     System.out.println("--- University logs ---");
                     uni.getLogs().forEach(System.out::println);
                 }
-                case 3 -> {
-                    System.out.print("First name: "); String fn = sc.nextLine();
-                    System.out.print("Last name: "); String ln = sc.nextLine();
-                    System.out.print("Email: "); String em = sc.nextLine();
-                    System.out.print("Password: "); String pw = sc.nextLine();
-                    System.out.print("Student ID: "); String sid = sc.nextLine();
-                    Student s = new Student("u" + System.currentTimeMillis(), fn, ln, em, pw, sid);
-                    uni.addUser(s);
-                    admin.addUser(s);
-                }
+                case 3 -> addUserByAdmin(admin);
                 case 4 -> {
                     System.out.print("Email to remove: ");
                     String em = sc.nextLine();
@@ -294,7 +326,16 @@ public class Main {
                         admin.removeUser(u);
                     }, () -> System.out.println("User not found."));
                 }
-                case 5 -> {
+                case 5 -> updateUserByAdmin(admin);
+                case 6 -> {
+                    System.out.print("User email: ");
+                    String em = sc.nextLine();
+                    uni.findByEmail(em).ifPresentOrElse(User::displayInfo,
+                        () -> System.out.println("User not found."));
+                }
+                case 7 -> viewAllTechRequests();
+                case 8 -> viewAllMessages();
+                case 9 -> {
                     System.out.print("User email: ");
                     String em = sc.nextLine();
                     uni.findByEmail(em).ifPresentOrElse(u -> {
@@ -309,10 +350,112 @@ public class Main {
                         System.out.println("Language set to " + lang);
                     }, () -> System.out.println("User not found."));
                 }
+                case 10 -> viewInbox(admin);
+                case 11 -> composeMessage(admin);
+                case 12 -> submitTechRequest(admin);
                 case 0 -> { return; }
                 default -> System.out.println("Invalid option.");
             }
         }
+    }
+
+    private static void addUserByAdmin(Admin admin) {
+        System.out.println("Role: 1.Student  2.GraduateStudent  3.Teacher  4.Manager  5.TechSupport");
+        System.out.print("> ");
+        int role = readInt();
+        System.out.print("First name: "); String fn = sc.nextLine();
+        System.out.print("Last name: ");  String ln = sc.nextLine();
+        System.out.print("Email: ");      String em = sc.nextLine();
+        if (uni.findByEmail(em).isPresent()) { System.out.println("Email already exists."); return; }
+        System.out.print("Password: ");   String pw = sc.nextLine();
+        String uid = "u" + System.currentTimeMillis();
+        User created = null;
+        switch (role) {
+            case 1 -> {
+                System.out.print("Student ID: "); String sid = sc.nextLine();
+                created = new Student(uid, fn, ln, em, pw, sid);
+            }
+            case 2 -> {
+                System.out.print("Student ID: "); String sid = sc.nextLine();
+                System.out.print("Degree (MASTER/PHD): "); String deg = sc.nextLine();
+                created = new GraduateStudent(uid, fn, ln, em, pw, sid, deg.isEmpty() ? "MASTER" : deg);
+            }
+            case 3 -> {
+                System.out.print("Employee ID: "); String eid = sc.nextLine();
+                System.out.print("Department: "); String dep = sc.nextLine();
+                System.out.println("Position: 1.TUTOR  2.LECTOR  3.SENIOR_LECTOR  4.PROFESSOR");
+                System.out.print("> ");
+                TeacherPosition pos = switch (readInt()) {
+                    case 2 -> TeacherPosition.LECTOR;
+                    case 3 -> TeacherPosition.SENIOR_LECTOR;
+                    case 4 -> TeacherPosition.PROFESSOR;
+                    default -> TeacherPosition.TUTOR;
+                };
+                created = new Teacher(uid, fn, ln, em, pw, eid, dep, pos);
+            }
+            case 4 -> {
+                System.out.print("Employee ID: "); String eid = sc.nextLine();
+                System.out.print("Department: "); String dep = sc.nextLine();
+                System.out.println("Type: 1.DEPARTMENT  2.DEAN_OFFICE  3.OR");
+                System.out.print("> ");
+                ManagerType mt = switch (readInt()) {
+                    case 2 -> ManagerType.DEAN_OFFICE;
+                    case 3 -> ManagerType.OR;
+                    default -> ManagerType.DEPARTMENT;
+                };
+                created = new Manager(uid, fn, ln, em, pw, eid, dep, mt);
+            }
+            case 5 -> {
+                System.out.print("Employee ID: "); String eid = sc.nextLine();
+                System.out.print("Department: "); String dep = sc.nextLine();
+                created = new TechSupportSpecialist(uid, fn, ln, em, pw, eid, dep);
+            }
+            default -> { System.out.println("Unknown role."); return; }
+        }
+        uni.addUser(created);
+        admin.addUser(created);
+    }
+
+    private static void updateUserByAdmin(Admin admin) {
+        System.out.print("Email of user to update: ");
+        String em = sc.nextLine();
+        var found = uni.findByEmail(em);
+        if (found.isEmpty()) { System.out.println("User not found."); return; }
+        User u = found.get();
+        System.out.print("New first name (blank to skip): "); String fn = sc.nextLine();
+        System.out.print("New last name (blank to skip): ");  String ln = sc.nextLine();
+        System.out.print("New email (blank to skip): ");      String ne = sc.nextLine();
+        System.out.print("New password (blank to skip): ");   String np = sc.nextLine();
+        try {
+            if (!fn.isBlank()) { var f = User.class.getDeclaredField("firstName"); f.setAccessible(true); f.set(u, fn); }
+            if (!ln.isBlank()) { var f = User.class.getDeclaredField("lastName");  f.setAccessible(true); f.set(u, ln); }
+            if (!ne.isBlank()) u.setEmail(ne);
+            if (!np.isBlank()) u.setPassword(np);
+        } catch (Exception e) { System.out.println("Update failed: " + e.getMessage()); return; }
+        admin.updateUser(u);
+    }
+
+    private static void viewAllTechRequests() {
+        var techs = techSpecialistList();
+        if (techs.isEmpty()) { System.out.println("No tech support staff."); return; }
+        int total = 0;
+        for (TechSupportSpecialist t : techs) {
+            for (TechRequest r : t.getAllRequests()) {
+                System.out.println((++total) + ". " + r);
+            }
+        }
+        if (total == 0) System.out.println("No tech requests.");
+    }
+
+    private static void viewAllMessages() {
+        int n = 0;
+        for (User u : uni.getUsers()) {
+            for (var m : u.getSent()) {
+                System.out.println((++n) + ". " + m.getSender().getFirstName() + " → "
+                        + m.getReceiver().getFirstName() + " [" + m.getDate() + "]: " + m.getContent());
+            }
+        }
+        if (n == 0) System.out.println("No messages.");
     }
 
     // ───────────────────────── MANAGER ─────────────────────────
@@ -328,6 +471,9 @@ public class Main {
             System.out.println("6. View all courses");
             System.out.println("7. Top cited researcher");
             System.out.println("8. View news");
+            System.out.println("9. Send message");
+            System.out.println("10. Inbox");
+            System.out.println("11. Submit tech request");
             System.out.println("0. Logout");
             System.out.print("> ");
 
@@ -375,6 +521,9 @@ public class Main {
                     else System.out.println("Top researcher: " + top);
                 }
                 case 8 -> viewNews();
+                case 9 -> composeMessage(manager);
+                case 10 -> viewInbox(manager);
+                case 11 -> submitTechRequest(manager);
                 case 0 -> { return; }
                 default -> System.out.println("Invalid option.");
             }
@@ -387,9 +536,12 @@ public class Main {
         while (true) {
             System.out.println("\n Tech Support: " + tech.getFirstName() );
             System.out.println("1. View pending requests");
-            System.out.println("2. Accept a request");
-            System.out.println("3. Reject a request");
-            System.out.println("4. Mark request as done");
+            System.out.println("2. View all requests");
+            System.out.println("3. Accept a request");
+            System.out.println("4. Reject a request");
+            System.out.println("5. Mark request as done");
+            System.out.println("6. Send message");
+            System.out.println("7. Inbox");
             System.out.println("0. Logout");
             System.out.print("> ");
 
@@ -399,20 +551,27 @@ public class Main {
                     if (reqs.isEmpty()) System.out.println("No pending requests.");
                     else printIndexed(reqs, Object::toString);
                 }
-                case 2, 3, 4 -> {
+                case 2 -> {
+                    var all = tech.getAllRequests();
+                    if (all.isEmpty()) System.out.println("No requests.");
+                    else printIndexed(all, Object::toString);
+                }
+                case 3, 4, 5 -> {
                     var all = tech.getAllRequests();
                     if (all.isEmpty()) { System.out.println("No requests."); break; }
                     printIndexed(all, Object::toString);
                     System.out.print("Choose request: ");
                     int ri = readInt() - 1;
                     if (!validIdx(ri, all)) break;
-                    System.out.println("Action: 2.Accept  3.Reject  4.Done");
+                    System.out.println("Action: 3.Accept  4.Reject  5.Done");
                     System.out.print("> ");
                     int action = readInt();
-                    if (action == 2) tech.acceptRequest(all.get(ri));
-                    else if (action == 3) tech.rejectRequest(all.get(ri));
-                    else if (action == 4) tech.markDone(all.get(ri));
+                    if (action == 3) tech.acceptRequest(all.get(ri));
+                    else if (action == 4) tech.rejectRequest(all.get(ri));
+                    else if (action == 5) tech.markDone(all.get(ri));
                 }
+                case 6 -> composeMessage(tech);
+                case 7 -> viewInbox(tech);
                 case 0 -> { return; }
                 default -> System.out.println("Invalid option.");
             }
@@ -573,7 +732,29 @@ public class Main {
 
     @SuppressWarnings("deprecation")
     private static void seedData() {
-        if (!uni.getUsers().isEmpty()) return;
+        boolean fresh = uni.getUsers().isEmpty();
+        if (!fresh) {
+            // Add missing teachers if not in saved data
+            if (uni.findByEmail("akhmetov@kbtu.kz").isEmpty()) {
+                Teacher t = new Teacher("7", "Bauyrzhan", "Akhmetov", "akhmetov@kbtu.kz", "math123", "EMP005", "Math", TeacherPosition.SENIOR_LECTOR);
+                uni.addUser(t);
+                uni.getCourses().stream().filter(c -> c.getCourseId().equals("MATH201")).findFirst().ifPresent(c -> { t.addCourse(c); c.addTeacher(t); });
+            }
+            if (uni.findByEmail("bekova@kbtu.kz").isEmpty()) {
+                Teacher t = new Teacher("8", "Aigerim", "Bekova", "bekova@kbtu.kz", "phy123", "EMP006", "Physics", TeacherPosition.LECTOR);
+                uni.addUser(t);
+                uni.getCourses().stream().filter(c -> c.getCourseId().equals("PHY101")).findFirst().ifPresent(c -> { t.addCourse(c); c.addTeacher(t); });
+            }
+            if (uni.findByEmail("seitkali@kbtu.kz").isEmpty()) {
+                Teacher t = new Teacher("9", "Nurlan", "Seitkali", "seitkali@kbtu.kz", "og123", "EMP007", "Oil&Gas", TeacherPosition.PROFESSOR);
+                ResearcherRole r = new ResearcherRole(t);
+                t.setResearcherRole(r);
+                uni.addUser(t);
+                uni.getCourses().stream().filter(c -> c.getCourseId().equals("OG101")).findFirst().ifPresent(c -> { t.addCourse(c); c.addTeacher(t); });
+            }
+            uni.saveToFile(DATA_FILE);
+            return;
+        }
 
         // Users
         Admin admin = new Admin("1", "Assel", "Bazhikey", "admin@kbtu.kz", "admin123", "EMP001", "IT");
@@ -609,14 +790,22 @@ public class Main {
         Manager manager = new Manager("5", "Nurasyl", "Dulatuly", "manager@kbtu.kz", "manager123", "EMP003", "Academic", ManagerType.DEPARTMENT);
         TechSupportSpecialist tech = new TechSupportSpecialist("6", "Serdar", "Dundar", "tech@kbtu.kz", "tech123", "EMP004", "IT");
 
+        Teacher math_t = new Teacher("7", "Bauyrzhan", "Akhmetov", "akhmetov@kbtu.kz", "math123", "EMP005", "Math", TeacherPosition.SENIOR_LECTOR);
+        Teacher phy_t  = new Teacher("8", "Aigerim",   "Bekova",   "bekova@kbtu.kz",   "phy123",  "EMP006", "Physics", TeacherPosition.LECTOR);
+        Teacher og_t   = new Teacher("9", "Nurlan",    "Seitkali", "seitkali@kbtu.kz", "og123",   "EMP007", "Oil&Gas", TeacherPosition.PROFESSOR);
+        ResearcherRole ogRole = new ResearcherRole(og_t);
+        og_t.setResearcherRole(ogRole);
+
         // Courses
         Course cs101  = new Course("CS101",   "Intro to CS",  3, CourseType.MAJOR,       30);
         Course math   = new Course("MATH201", "Calculus",     4, CourseType.MAJOR,        25);
         Course phy101 = new Course("PHY101",  "Physics",      3, CourseType.MINOR,        20);
         Course free   = new Course("OG101",   "Oil & Gas 101",3, CourseType.FREE_ELECTIVE, 15);
 
-        prof.addCourse(cs101); cs101.addTeacher(prof);
-        prof.addCourse(math);  math.addTeacher(prof);
+        prof.addCourse(cs101);  cs101.addTeacher(prof);
+        math_t.addCourse(math); math.addTeacher(math_t);
+        phy_t.addCourse(phy101); phy101.addTeacher(phy_t);
+        og_t.addCourse(free);   free.addTeacher(og_t);
 
         cs101.addStudent(student);
         cs101.addMark(student, new Mark(25, 22, 35));
@@ -640,6 +829,9 @@ public class Main {
         uni.addUser(grad);
         uni.addUser(manager);
         uni.addUser(tech);
+        uni.addUser(math_t);
+        uni.addUser(phy_t);
+        uni.addUser(og_t);
 
         uni.addCourse(cs101);
         uni.addCourse(math);

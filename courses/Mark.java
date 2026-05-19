@@ -19,41 +19,31 @@ public class Mark implements Serializable{
         return firstAttestation + secondAttestation + finalExam;
     }
     public String getLetterGrade(){
+        double att = firstAttestation + secondAttestation;
+        if (firstAttestation == 0 && secondAttestation == 0 && finalExam == 0) return "—";
+        if (finalExam == 0) {
+            if (firstAttestation > 0 && secondAttestation > 0 && att < 29.5) return "F";
+            return "—";
+        }
+        if (att < 29.5) return "F";
+        if (finalExam < 9.5) return "R";
+        if (finalExam <= 19.5) return "FX";
         double total = getTotalMark();
-        if(total >= 95){
-            return "A";
-        }
-        if(total >= 90){
-            return "A-";
-        }
-        if (total >= 85){
-            return "B+";
-        }
-        if (total >= 80){
-            return "B";
-        }
-        if (total >= 75){
-            return "B-";
-        }
-        if (total >= 70){
-            return "C+";
-        }
-        if (total >= 65){
-            return "C";
-        }
-        if (total >= 60){
-            return "C-";
-        }
-        if (total >= 55){
-            return "D+";
-        }
-        if (total >= 50){
-            return "D";
-        }
+        if(total >= 95) return "A";
+        if(total >= 90) return "A-";
+        if (total >= 85) return "B+";
+        if (total >= 80) return "B";
+        if (total >= 75) return "B-";
+        if (total >= 70) return "C+";
+        if (total >= 65) return "C";
+        if (total >= 60) return "C-";
+        if (total >= 55) return "D+";
+        if (total >= 50) return "D";
         return "F";
     }
     public boolean isPassed(){
-        return getTotalMark()>=50;
+        String g = getLetterGrade();
+        return !(g.equals("F") || g.equals("R") || g.equals("FX"));
     }
     public double getFirstAttestation()  { 
         return firstAttestation; 

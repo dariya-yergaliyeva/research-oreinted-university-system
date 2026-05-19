@@ -1,7 +1,10 @@
 package users;
 import enums.Language;
+import comunication.Message;
 import patterns.observer.Observer;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class User implements Observer, Serializable {
     private static final long serialVersionUID = 1L;
@@ -11,6 +14,8 @@ public abstract class User implements Observer, Serializable {
     private String email;
     private String password;
     private Language language;
+    private List<Message> inbox = new ArrayList<>();
+    private List<Message> sent = new ArrayList<>();
 
     public User(String id, String firstName, String lastName, String email, String password) {
         this.id = id;
@@ -30,7 +35,26 @@ public abstract class User implements Observer, Serializable {
     }
 
     public void sendMessage(User to, String text) {
-        System.out.println("Message from " + firstName + " to " + to.firstName + ": " + text);
+        if (sent == null) sent = new ArrayList<>();
+        Message m = new Message(this, to, text);
+        sent.add(m);
+        to.receiveMessage(m);
+        System.out.println("Message sent to " + to.firstName + ".");
+    }
+
+    public void receiveMessage(Message m) {
+        if (inbox == null) inbox = new ArrayList<>();
+        inbox.add(m);
+    }
+
+    public List<Message> getInbox() {
+        if (inbox == null) inbox = new ArrayList<>();
+        return inbox;
+    }
+
+    public List<Message> getSent() {
+        if (sent == null) sent = new ArrayList<>();
+        return sent;
     }
 
     public void update(String message) {

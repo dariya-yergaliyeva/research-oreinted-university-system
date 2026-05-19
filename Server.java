@@ -53,6 +53,7 @@ public class Server {
         server.createContext("/api/remove-user",          Server::handleRemoveUser);
         server.createContext("/api/rate-teacher",         Server::handleRateTeacher);
         server.createContext("/api/send-message",         Server::handleSendMessage);
+        server.createContext("/api/messages",              Server::handleMessages);
 
         server.start();
         System.out.println("Server started: http://localhost:8080");
@@ -665,7 +666,44 @@ public class Server {
         var to   = uni().findByEmail(toEmail);
         if (from.isEmpty()||to.isEmpty()) { send(ex, 400, "{\"error\":\"User not found\"}"); return; }
         from.get().sendMessage(to.get(), text);
+        save();
         send(ex, 200, "{\"ok\":true}");
+    }
+
+    static void handleMessages(HttpExchange ex) throws IOException {
+        if (cors(ex)) return;
+        String email = dec(qp(ex, "email"));
+        var found = uni().findByEmail(email);
+        if (found.isEmpty()) { send(ex, 400, "{\"error\":\"Not found\"}"); return; }
+        User u = found.get();
+        StringBuilder sb = new StringBuilder("{\"inbox\":[");
+        var inbox = u.getInbox();
+        for (int i = 0; i < inbox.size(); i++) {
+            if (i > 0) sb.append(",");
+            var m = inbox.get(i);
+            sb.append("{");
+            app(sb, "from", m.getSender().getEmail()); sb.append(",");
+            app(sb, "fromName", m.getSender().getFirstName() + " " + m.getSender().getLastName()); sb.append(",");
+            app(sb, "fromRole", m.getSender().getClass().getSimpleName()); sb.append(",");
+            app(sb, "text", m.getContent()); sb.append(",");
+            sb.append("\"ts\":").append(m.getDate().getTime());
+            sb.append("}");
+        }
+        sb.append("],\"sent\":[");
+        var sent = u.getSent();
+        for (int i = 0; i < sent.size(); i++) {
+            if (i > 0) sb.append(",");
+            var m = sent.get(i);
+            sb.append("{");
+            app(sb, "to", m.getReceiver().getEmail()); sb.append(",");
+            app(sb, "toName", m.getReceiver().getFirstName() + " " + m.getReceiver().getLastName()); sb.append(",");
+            app(sb, "toRole", m.getReceiver().getClass().getSimpleName()); sb.append(",");
+            app(sb, "text", m.getContent()); sb.append(",");
+            sb.append("\"ts\":").append(m.getDate().getTime());
+            sb.append("}");
+        }
+        sb.append("]}");
+        send(ex, 200, sb.toString());
     }
 
     // ─────────────────────────── HELPERS ─────────────────────────────────────
