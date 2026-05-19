@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"comunication"},{"l":"courses"},{"l":"enums"},{"l":"exception"},{"l":"patterns.factory"},{"l":"patterns.observer"},{"l":"research"},{"l":"services"},{"l":"university"},{"l":"users"}];updateSearchResults();

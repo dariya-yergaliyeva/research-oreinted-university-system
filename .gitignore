@@ -1,0 +1,27 @@
+.claude/
+.windsurf/
+.cursor/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Build / compile
+out/
+build/
+target/
+bin/
+*.class
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data / cache
+*.dat
+*.log
+
+# Node (если есть)
+node_modules/
+.next/
