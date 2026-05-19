@@ -1,0 +1,375 @@
+@startuml UniversitySystem
+
+skinparam classAttributeIconSize 0
+
+' ===== ENUMERATIONS =====
+enum TeacherPosition {
+  TUTOR
+  LECTOR
+  SENIOR_LECTOR
+  PROFESSOR
+}
+
+enum LessonType {
+  LECTURE
+  PRACTICE
+}
+
+enum CourseType {
+  MAJOR
+  MINOR
+  FREE_ELECTIVE
+}
+
+enum Language {
+  KZ
+  EN
+  RU
+}
+
+enum UrgencyLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum RequestStatus {
+  NEW
+  VIEWED
+  ACCEPTED
+  REJECTED
+  DONE
+}
+
+enum ManagerType {
+  OR
+  DEPARTMENT
+  DEAN_OFFICE
+}
+
+enum CitationFormat {
+  PLAIN_TEXT
+  BIBTEX
+}
+
+' ===== PATTERN 1: OBSERVER =====
+interface Observer {
+  +update(message: String): void
+}
+
+interface Subject {
+  +subscribe(o: Observer): void
+  +unsubscribe(o: Observer): void
+  +notifyObservers(message: String): void
+}
+
+' ===== PATTERN 2: FACTORY =====
+abstract class UserFactory {
+  +createUser(type: String): User
+}
+
+class UniversityUserFactory {
+  +createUser(type: String): User
+}
+UserFactory <|-- UniversityUserFactory
+
+' ===== PATTERN 3: DECORATOR =====
+interface Researcher {
+  +calculateHIndex(): int
+  +printPapers(c: Comparator): void
+  +getResearchPapers(): List<ResearchPaper>
+  +getResearchProjects(): List<ResearchProject>
+}
+
+class ResearcherRole {
+  -user: User
+  -papers: List<ResearchPaper>
+  -projects: List<ResearchProject>
+  +calculateHIndex(): int
+  +printPapers(c: Comparator): void
+  +getResearchPapers(): List<ResearchPaper>
+  +getResearchProjects(): List<ResearchProject>
+}
+ResearcherRole ..|> Researcher
+ResearcherRole --> User
+
+' ===== PATTERN 4: SINGLETON =====
+class University {
+  -{static}instance: University
+  -users: List<User>
+  -courses: List<Course>
+  -newsList: List<News>
+  -journals: List<ResearchJournal>
+  +{static}getInstance(): University
+  +addUser(user: User): void
+  +getUsers(): List<User>
+  +getTopCitedResearcher(): Researcher
+}
+
+' ===== INTERFACE: Comparable =====
+interface Comparable {
+  +compareTo(o: Object): int
+}
+
+' ===== ABSTRACT: User =====
+abstract class User {
+  -id: String
+  -firstName: String
+  -lastName: String
+  -email: String
+  -password: String
+  -language: Language
+  +login(): boolean
+  +logout(): void
+  +sendMessage(to: User, text: String): void
+  +update(message: String): void
+  +toString(): String
+  +equals(o: Object): boolean
+  +hashCode(): int
+}
+User ..|> Observer
+
+' ===== ABSTRACT: Employee =====
+abstract class Employee {
+  -employeeId: String
+  -department: String
+}
+Employee --|> User
+
+' ===== CLASS: Teacher =====
+class Teacher {
+  -position: TeacherPosition
+  -courses: List<Course>
+  -rating: double
+  -researcherRole: ResearcherRole
+  +sendComplaint(s: Student, u: UrgencyLevel): void
+  +putMark(s: Student, c: Course, m: Mark): void
+  +viewStudents(c: Course): List<Student>
+  +generateMarkReport(c: Course): void
+}
+Teacher --|> Employee
+
+' ===== CLASS: Manager =====
+class Manager {
+  -managerType: ManagerType
+  +assignCourseToTeacher(c: Course, t: Teacher): void
+  +approveRegistration(s: Student, c: Course): void
+  +addCourseForRegistration(c: Course): void
+  +createStatisticalReport(): void
+  +manageNews(n: News): void
+  +viewStudentsSortedByGPA(): List<Student>
+  +viewStudentsSortedAlphabetically(): List<Student>
+}
+Manager --|> Employee
+
+' ===== CLASS: Admin =====
+class Admin {
+  +addUser(user: User): void
+  +removeUser(user: User): void
+  +updateUser(user: User): void
+  +viewLogs(): List<String>
+}
+Admin --|> Employee
+
+' ===== CLASS: TechSupportSpecialist =====
+class TechSupportSpecialist {
+  +viewNewRequests(): List<TechRequest>
+  +acceptRequest(r: TechRequest): void
+  +rejectRequest(r: TechRequest): void
+  +markDone(r: TechRequest): void
+}
+TechSupportSpecialist --|> Employee
+
+' ===== CLASS: Student =====
+class Student {
+  -studentId: String
+  -gpa: double
+  -credits: int
+  -failCount: int
+  -courses: List<Course>
+  -organizations: List<StudentOrganization>
+  -researcherRole: ResearcherRole
+  +registerCourse(c: Course): void
+  +viewMarks(): List<Mark>
+  +getTranscript(): void
+  +rateTeacher(t: Teacher, r: int): void
+  +viewAttendance(): List<Attendance>
+}
+Student --|> User
+Comparable <|.. Student
+
+' ===== CLASS: GraduateStudent =====
+class GraduateStudent {
+  -degreeType: String
+  -supervisor: ResearcherRole
+  -diplomaProjects: List<ResearchPaper>
+  +setSupervisor(r: ResearcherRole): void
+}
+GraduateStudent --|> Student
+
+' ===== CLASS: Course =====
+class Course {
+  -courseId: String
+  -name: String
+  -credits: int
+  -courseType: CourseType
+  -teachers: List<Teacher>
+  -students: List<Student>
+  -lessons: List<Lesson>
+  -maxStudents: int
+  +addTeacher(t: Teacher): void
+  +addStudent(s: Student): void
+}
+
+' ===== CLASS: Lesson =====
+class Lesson {
+  -lessonId: String
+  -lessonType: LessonType
+  -date: Date
+  -room: String
+  -teacher: Teacher
+  +getAttendance(): List<Attendance>
+}
+
+' ===== CLASS: Mark =====
+class Mark {
+  -firstAttestation: double
+  -secondAttestation: double
+  -finalExam: double
+  +getTotalMark(): double
+  +getLetterGrade(): String
+}
+
+' ===== CLASS: Schedule =====
+class Schedule {
+  -scheduleId: String
+  -semester: String
+  -lessons: List<Lesson>
+  +addLesson(l: Lesson): void
+  +removeLesson(l: Lesson): void
+  +getLessonsForStudent(s: Student): List<Lesson>
+  +getLessonsForTeacher(t: Teacher): List<Lesson>
+  +generateSchedule(): void
+}
+
+' ===== CLASS: Attendance =====
+class Attendance {
+  -student: Student
+  -lesson: Lesson
+  -isPresent: boolean
+  -date: Date
+  +markPresent(): void
+  +markAbsent(): void
+}
+
+' ===== CLASS: ResearchPaper =====
+class ResearchPaper {
+  -title: String
+  -authors: List<String>
+  -journal: String
+  -pages: int
+  -date: Date
+  -doi: String
+  -citations: int
+  +getCitation(f: CitationFormat): String
+}
+Comparable <|.. ResearchPaper
+
+' ===== CLASS: ResearchProject =====
+class ResearchProject {
+  -topic: String
+  -participants: List<Researcher>
+  -publishedPapers: List<ResearchPaper>
+  +addParticipant(r: Researcher): void
+  +addPaper(p: ResearchPaper): void
+}
+
+' ===== CLASS: News =====
+class News {
+  -title: String
+  -content: String
+  -topic: String
+  -isPinned: boolean
+  -comments: List<String>
+  -date: Date
+  +addComment(c: String): void
+  +pin(): void
+}
+
+' ===== CLASS: Message =====
+class Message {
+  -sender: User
+  -receiver: User
+  -content: String
+  -date: Date
+  +send(): void
+}
+
+' ===== CLASS: TechRequest =====
+class TechRequest {
+  -description: String
+  -status: RequestStatus
+  -createdBy: User
+  -date: Date
+  +updateStatus(s: RequestStatus): void
+}
+
+' ===== CLASS: StudentOrganization =====
+class StudentOrganization {
+  -name: String
+  -members: List<Student>
+  -head: Student
+  +addMember(s: Student): void
+  +setHead(s: Student): void
+}
+
+' ===== CLASS: ResearchJournal =====
+class ResearchJournal {
+  -name: String
+  -papers: List<ResearchPaper>
+  -subscribers: List<User>
+  +subscribe(o: Observer): void
+  +unsubscribe(o: Observer): void
+  +notifyObservers(message: String): void
+  +publishPaper(p: ResearchPaper): void
+}
+ResearchJournal ..|> Subject
+
+' ===== CUSTOM EXCEPTIONS =====
+class LowHIndexException {
+  +LowHIndexException(message: String)
+}
+
+class NotResearcherException {
+  +NotResearcherException(message: String)
+}
+
+' ===== INHERITANCE =====
+User <|-- Employee
+User <|-- Student
+Employee <|-- Teacher
+Employee <|-- Manager
+Employee <|-- Admin
+Employee <|-- TechSupportSpecialist
+Student <|-- GraduateStudent
+
+' ===== ASSOCIATIONS =====
+Course "1" *-- "many" Lesson
+Course "1" *-- "many" Mark
+Student "many" o-- "many" Course
+Teacher "many" o-- "many" Course
+GraduateStudent "many" --> "1" ResearcherRole : supervisor
+Researcher "1" o-- "many" ResearchPaper
+Researcher "1" o-- "many" ResearchProject
+ResearchProject "1" *-- "many" ResearchPaper
+Schedule "1" *-- "many" Lesson
+Lesson "1" *-- "many" Attendance
+Attendance "many" --> "1" Student
+ResearchJournal "1" o-- "many" ResearchPaper
+StudentOrganization "1" o-- "many" Student
+Message --> User : sender
+Message --> User : receiver
+University "1" o-- "many" User
+University "1" o-- "many" Course
+
+@enduml
