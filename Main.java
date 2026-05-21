@@ -4,12 +4,11 @@ import courses.Mark;
 import courses.TechRequest;
 import enums.*;
 import exception.LowHIndexException;
+import java.util.*;
+import java.util.stream.Collectors;
 import research.*;
 import university.University;
 import users.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -49,6 +48,7 @@ public class Main {
         }
 
         System.out.println("Goodbye.");
+        System.exit(0);
     }
 
     private static void routeUser(User user) {
@@ -92,15 +92,31 @@ public class Main {
                     if (validIdx(idx, courses)) student.registerCourse(courses.get(idx));
                 }
                 case 3 -> {
-                    List<Mark> marks = student.viewMarks();
-                    if (marks.isEmpty()) System.out.println("No marks yet.");
-                    else marks.forEach(System.out::println);
+                    if (student.getCourses().isEmpty()) { System.out.println("No marks yet."); }
+                    else for (Course c : student.getCourses()) {
+                        List<Mark> ms = c.getMarksForStudent(student);
+                        if (ms.isEmpty()) { System.out.println(c.getName() + ": no marks yet"); continue; }
+                        Mark m = ms.get(ms.size() - 1);
+                        double attPct = c.getAttendancePercentage(student);
+                        boolean admitted = (m.getFirstAttestation() + m.getSecondAttestation() >= 30) && (attPct >= 30);
+                        String grade = admitted ? m.getLetterGrade() : "F";
+                        System.out.println(c.getName() + ": att1=" + m.getFirstAttestation()
+                            + " att2=" + m.getSecondAttestation() + " exam=" + m.getFinalExam()
+                            + " total=" + m.getTotalMark() + " grade=" + grade
+                            + (admitted ? "" : " [NOT ADMITTED to final exam]"));
+                    }
                 }
                 case 4 -> student.getTranscript();
                 case 5 -> {
-                    var att = student.viewAttendance();
-                    System.out.println("Attendance records: " + att.size());
-                    att.forEach(System.out::println);
+                    if (student.getCourses().isEmpty()) { System.out.println("No attendance yet."); }
+                    else for (Course c : student.getCourses()) {
+                        int present = c.getPresentCount(student);
+                        int total = c.getSessionCount(student);
+                        double pct = c.getAttendancePercentage(student);
+                        System.out.println(c.getName() + ": attended " + present + "/" + total
+                            + " (" + String.format("%.0f", pct) + "%)"
+                            + (pct < 30 ? "  [NOT ADMITTED to final exam]" : ""));
+                    }
                 }
                 case 6 -> {
                     List<Teacher> teachers = teacherList();
@@ -182,8 +198,9 @@ public class Main {
             System.out.println("7. Send message");
             System.out.println("8. Inbox");
             System.out.println("9. Submit tech request");
+            System.out.println("10. Mark attendance");
             if (teacher.getResearcherRole() != null) {
-                System.out.println("10. Research actions");
+                System.out.println("11. Research actions");
             }
             System.out.println("0. Logout");
             System.out.print("> ");
@@ -207,7 +224,8 @@ public class Main {
                 case 7 -> composeMessage(teacher);
                 case 8 -> viewInbox(teacher);
                 case 9 -> submitTechRequest(teacher);
-                case 10 -> { if (teacher.getResearcherRole() != null) researchMenu(teacher.getResearcherRole()); }
+                case 10 -> markAttendance(teacher);
+                case 11 -> { if (teacher.getResearcherRole() != null) researchMenu(teacher.getResearcherRole()); }
                 case 0 -> { return; }
                 default -> System.out.println("Invalid option.");
             }
@@ -223,16 +241,54 @@ public class Main {
         System.out.print("Choose student: ");
         int si = readInt() - 1;
         if (!validIdx(si, students)) return;
+        Student student = students.get(si);
         System.out.print("Attestation 1 (0-30): ");
         double a1 = readDouble();
         System.out.print("Attestation 2 (0-30): ");
         double a2 = readDouble();
-        System.out.print("Final exam (0-40): ");
-        double fe = readDouble();
+
+        double attPct = c.getAttendancePercentage(student);
+        boolean admitted = (a1 + a2 >= 30) && (attPct >= 30);
+        double fe = 0;
+        if (!admitted) {
+            String reason = (a1 + a2 < 30) ? "attestation " + (a1 + a2) + " < 30"
+                                           : "attendance " + String.format("%.0f", attPct) + "% < 30%";
+            System.out.println("NOT ADMITTED to final exam (" + reason + "). Final exam = 0.");
+        } else {
+            System.out.print("Final exam (0-40): ");
+            fe = readDouble();
+        }
         Mark mark = new Mark(a1, a2, fe);
-        c.addMark(students.get(si), mark);
-        teacher.putMark(students.get(si), c, mark);
-        System.out.println("Grade: " + mark.getLetterGrade() + " total=" + mark.getTotalMark() );
+        c.addMark(student, mark);
+        teacher.putMark(student, c, mark);
+        String grade = admitted ? mark.getLetterGrade() : "F";
+        System.out.println("Grade: " + grade + " total=" + mark.getTotalMark()
+            + " | attendance=" + String.format("%.0f", attPct) + "%");
+        uni.saveToFile(DATA_FILE);
+    }
+
+    private static void markAttendance(Teacher teacher) {
+        Course c = selectTeacherCourse(teacher);
+        if (c == null) return;
+        List<Student> students = c.getStudents();
+        if (students.isEmpty()) { System.out.println("No students enrolled."); return; }
+        System.out.print("Date (YYYY-MM-DD, blank = today): ");
+        String date = sc.nextLine().trim();
+        if (date.isEmpty()) date = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
+        System.out.println("Mark attendance for " + c.getName() + " on " + date + " (1 = present, 0 = absent):");
+        for (Student s : students) {
+            System.out.print("  " + s.getFirstName() + " " + s.getLastName() + ": ");
+            boolean present = readInt() == 1;
+            c.markAttendance(s, date, present, teacher);
+        }
+        System.out.println("Attendance saved.");
+        for (Student s : students) {
+            double pct = c.getAttendancePercentage(s);
+            System.out.println("  " + s.getFirstName() + " " + s.getLastName()
+                + " -> " + String.format("%.0f", pct) + "%"
+                + (pct < 30 ? "  [NOT ADMITTED to final]" : ""));
+        }
+        uni.saveToFile(DATA_FILE);
     }
 
     private static void sendComplaint(Teacher teacher) {
@@ -257,11 +313,18 @@ public class Main {
 
     private static void viewInbox(User u) {
         var inbox = u.getInbox();
-        if (inbox.isEmpty()) { System.out.println("Inbox is empty."); return; }
-        System.out.println("=== Inbox (" + inbox.size() + ") ===");
+        var sent = u.getSent();
+        if (inbox.isEmpty() && sent.isEmpty()) { System.out.println("No messages yet."); return; }
+        System.out.println("=== Received (" + inbox.size() + ") ===");
         for (int i = 0; i < inbox.size(); i++) {
             var m = inbox.get(i);
             System.out.println((i+1) + ". From " + m.getSender().getFirstName() + " " + m.getSender().getLastName()
+                    + " [" + m.getDate() + "]: " + m.getContent());
+        }
+        System.out.println("=== Sent (" + sent.size() + ") ===");
+        for (int i = 0; i < sent.size(); i++) {
+            var m = sent.get(i);
+            System.out.println((i+1) + ". To " + m.getReceiver().getFirstName() + " " + m.getReceiver().getLastName()
                     + " [" + m.getDate() + "]: " + m.getContent());
         }
     }
@@ -278,6 +341,7 @@ public class Main {
         System.out.print("Message: ");
         String text = sc.nextLine();
         from.sendMessage(recipients.get(ri), text);
+        uni.saveToFile(DATA_FILE);
     }
 
     private static void submitTechRequest(User from) {
@@ -752,7 +816,7 @@ public class Main {
                 uni.addUser(t);
                 uni.getCourses().stream().filter(c -> c.getCourseId().equals("OG101")).findFirst().ifPresent(c -> { t.addCourse(c); c.addTeacher(t); });
             }
-            uni.saveToFile(DATA_FILE);
+            setupDemoData();
             return;
         }
 
@@ -807,9 +871,6 @@ public class Main {
         phy_t.addCourse(phy101); phy101.addTeacher(phy_t);
         og_t.addCourse(free);   free.addTeacher(og_t);
 
-        cs101.addStudent(student);
-        cs101.addMark(student, new Mark(25, 22, 35));
-
         // Research journal (Observer pattern)
         ResearchJournal journal = new ResearchJournal("Journal of CS");
         journal.publishPaper(p1);
@@ -840,8 +901,97 @@ public class Main {
 
         uni.addJournal(journal);
 
+        setupDemoData();
+
         System.out.println("Demo data initialized.");
         System.out.println("Accounts: admin@kbtu.kz/admin123 | prof@kbtu.kz/prof123 | student@kbtu.kz/student123");
         System.out.println("          grad@kbtu.kz/grad123   | manager@kbtu.kz/manager123 | tech@kbtu.kz/tech123");
+        System.out.println("          dean@kbtu.kz/dean123   | iskakova@kbtu.kz/cs123     | tech2@kbtu.kz/tech123");
+        System.out.println("Students: aruzhan,daniyar,madina,yerlan,alikhan,dana,timur,saule @kbtu.kz (all pass123)");
+    }
+
+    private static Course findCourse(String id) {
+        return uni.getCourses().stream().filter(c -> c.getCourseId().equals(id)).findFirst().orElse(null);
+    }
+
+    private static void ensureStudent(String id, String fn, String ln, String email, String sid, double gpa) {
+        if (uni.findByEmail(email).isPresent()) return;
+        Student s = new Student(id, fn, ln, email, "pass123", sid);
+        s.setGpa(gpa);
+        uni.addUser(s);
+    }
+
+    private static void enroll(String email, String courseId) {
+        var f = uni.findByEmail(email);
+        Course c = findCourse(courseId);
+        if (c != null && f.isPresent() && f.get() instanceof Student s) s.registerCourse(c);
+    }
+
+    private static void markIfAbsent(String email, String courseId, double a1, double a2, double fe) {
+        var f = uni.findByEmail(email);
+        Course c = findCourse(courseId);
+        if (c != null && f.isPresent() && f.get() instanceof Student s && c.getMarksForStudent(s).isEmpty())
+            c.addMark(s, new Mark(a1, a2, fe));
+    }
+
+    private static void markSeries(Course c, Teacher t, String[] days, String email, boolean... present) {
+        var f = uni.findByEmail(email);
+        if (c == null || f.isEmpty() || !(f.get() instanceof Student s)) return;
+        for (int i = 0; i < days.length && i < present.length; i++) c.markAttendance(s, days[i], present[i], t);
+    }
+
+    private static void setupDemoData() {
+        ensureStudent("11", "Aruzhan", "Smagulova",  "aruzhan@kbtu.kz", "STU003", 3.2);
+        ensureStudent("12", "Daniyar", "Kim",        "daniyar@kbtu.kz", "STU004", 2.8);
+        ensureStudent("13", "Madina",  "Tulegenova", "madina@kbtu.kz",  "STU005", 3.9);
+        ensureStudent("14", "Yerlan",  "Abay",       "yerlan@kbtu.kz",  "STU006", 3.0);
+        ensureStudent("17", "Alikhan", "Zhumabek",   "alikhan@kbtu.kz", "STU007", 3.4);
+        ensureStudent("18", "Dana",    "Serik",      "dana@kbtu.kz",    "STU008", 3.6);
+        ensureStudent("19", "Timur",   "Bolat",      "timur@kbtu.kz",   "STU009", 2.9);
+        ensureStudent("20", "Saule",   "Kassym",     "saule@kbtu.kz",   "STU010", 3.7);
+        if (uni.findByEmail("iskakova@kbtu.kz").isEmpty())
+            uni.addUser(new Teacher("10", "Gulnara", "Iskakova", "iskakova@kbtu.kz", "cs123", "EMP008", "CS", TeacherPosition.LECTOR));
+        if (uni.findByEmail("dean@kbtu.kz").isEmpty())
+            uni.addUser(new Manager("15", "Aibek", "Nurlanuly", "dean@kbtu.kz", "dean123", "EMP009", "Dean Office", ManagerType.DEAN_OFFICE));
+        if (uni.findByEmail("tech2@kbtu.kz").isEmpty())
+            uni.addUser(new TechSupportSpecialist("16", "Olzhas", "Karim", "tech2@kbtu.kz", "tech123", "EMP010", "IT"));
+
+        for (Course c : uni.getCourses())
+            for (Student s : new ArrayList<>(c.getStudents()))
+                if (!s.getCourses().contains(c)) s.getCourses().add(c);
+        for (User u : uni.getUsers())
+            if (u instanceof Student s)
+                for (Course c : new ArrayList<>(s.getCourses()))
+                    if (!c.getStudents().contains(s)) c.addStudent(s);
+
+        enroll("student@kbtu.kz", "CS101");
+        enroll("aruzhan@kbtu.kz", "CS101");
+        enroll("daniyar@kbtu.kz", "CS101");
+        enroll("alikhan@kbtu.kz", "CS101");
+        enroll("dana@kbtu.kz",    "CS101");
+        enroll("madina@kbtu.kz",  "MATH201");
+        enroll("dana@kbtu.kz",    "MATH201");
+        enroll("timur@kbtu.kz",   "MATH201");
+        enroll("yerlan@kbtu.kz",  "PHY101");
+        enroll("timur@kbtu.kz",   "PHY101");
+        enroll("saule@kbtu.kz",   "PHY101");
+        enroll("saule@kbtu.kz",   "OG101");
+        enroll("alikhan@kbtu.kz", "OG101");
+
+        markIfAbsent("student@kbtu.kz", "CS101", 25, 22, 35);
+        markIfAbsent("aruzhan@kbtu.kz", "CS101", 28, 27, 38);
+        markIfAbsent("daniyar@kbtu.kz", "CS101", 26, 25, 0);
+
+        Course cs = findCourse("CS101");
+        Teacher prof = (uni.findByEmail("prof@kbtu.kz").orElse(null) instanceof Teacher t) ? t : null;
+        if (cs != null && prof != null && cs.getLesson().isEmpty()) {
+            String[] d = {"2026-02-03", "2026-02-05", "2026-02-07", "2026-02-10", "2026-02-12"};
+            markSeries(cs, prof, d, "student@kbtu.kz", true, true, true, true, true);
+            markSeries(cs, prof, d, "aruzhan@kbtu.kz", true, true, true, true, true);
+            markSeries(cs, prof, d, "daniyar@kbtu.kz", true, false, false, false, false);
+            markSeries(cs, prof, d, "alikhan@kbtu.kz", true, true, false, true, true);
+            markSeries(cs, prof, d, "dana@kbtu.kz",    true, true, true, false, true);
+        }
+        uni.saveToFile(DATA_FILE);
     }
 }

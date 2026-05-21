@@ -54,6 +54,9 @@ public class Server {
         server.createContext("/api/rate-teacher",         Server::handleRateTeacher);
         server.createContext("/api/send-message",         Server::handleSendMessage);
         server.createContext("/api/messages",              Server::handleMessages);
+        server.createContext("/api/mark-attendance",       Server::handleMarkAttendance);
+        server.createContext("/api/attendance",            Server::handleAttendance);
+        server.createContext("/api/course-attendance",     Server::handleCourseAttendance);
 
         server.start();
         System.out.println("Server started: http://localhost:8080");
@@ -167,16 +170,22 @@ public class Server {
             if (!first) sb.append(","); first = false;
             List<Mark> marks = c.getMarksForStudent(s);
             double a1=0, a2=0, fe=0, total=0; String grade = "—";
+            double attPct = c.getAttendancePercentage(s);
+            boolean admitted = true;
             if (!marks.isEmpty()) {
                 Mark m = marks.get(marks.size() - 1);
                 a1=m.getFirstAttestation(); a2=m.getSecondAttestation();
-                fe=m.getFinalExam(); total=m.getTotalMark(); grade=m.getLetterGrade();
+                fe=m.getFinalExam(); total=m.getTotalMark();
+                admitted = (a1 + a2 >= 30) && (attPct >= 30);
+                grade = admitted ? m.getLetterGrade() : "F";
             }
             sb.append("{"); app(sb, "course", c.getName());
             sb.append(","); app(sb, "code", c.getCourseId());
             sb.append(",\"credits\":").append(c.getCredits());
             sb.append(",\"a1\":").append(a1).append(",\"a2\":").append(a2);
             sb.append(",\"exam\":").append(fe).append(",\"total\":").append(total);
+            sb.append(",\"attendance\":").append(String.format("%.0f", attPct));
+            sb.append(",\"admitted\":").append(admitted);
             sb.append(","); app(sb, "grade", grade); sb.append("}");
         }
         sb.append("]");
@@ -472,11 +481,20 @@ public class Server {
         if (fs.isEmpty() || !(fs.get() instanceof Student s)) { send(ex, 400, "{\"error\":\"Student not found\"}"); return; }
         if (fc.isEmpty()) { send(ex, 400, "{\"error\":\"Course not found\"}"); return; }
 
+        Course course = fc.get();
+        if (!course.getStudents().contains(s)) course.addStudent(s);
+        double attPct = course.getAttendancePercentage(s);
+        boolean admitted = (a1 + a2 >= 30) && (attPct >= 30);
+        if (!admitted) fe = 0;
+
         Mark mark = new Mark(a1, a2, fe);
-        fc.get().addMark(s, mark);
-        t.putMark(s, fc.get(), mark);
+        course.addMark(s, mark);
+        t.putMark(s, course, mark);
         save();
-        send(ex, 200, "{\"ok\":true,\"grade\":\""+mark.getLetterGrade()+"\",\"total\":"+mark.getTotalMark()+"}");
+        String grade = admitted ? mark.getLetterGrade() : "F";
+        String reason = (a1 + a2 < 30) ? "attestation" : (attPct < 30 ? "attendance" : "");
+        send(ex, 200, "{\"ok\":true,\"admitted\":"+admitted+",\"grade\":\""+grade+"\",\"total\":"+mark.getTotalMark()
+            +",\"attendance\":"+String.format("%.0f", attPct)+",\"reason\":\""+reason+"\"}");
     }
 
     static void handleSendComplaint(HttpExchange ex) throws IOException {
@@ -521,6 +539,78 @@ public class Server {
         sb.append(",\"enrolled\":").append(students.size());
         sb.append(",\"avgMark\":").append(String.format("%.1f", avg));
         sb.append(",\"students\":[").append(rows).append("]}");
+        send(ex, 200, sb.toString());
+    }
+
+    // ─────────────────────────── ATTENDANCE ──────────────────────────────────
+
+    static void handleMarkAttendance(HttpExchange ex) throws IOException {
+        if (cors(ex)) return;
+        if (!"POST".equals(ex.getRequestMethod())) { send(ex, 405, "{}"); return; }
+        String body = body(ex);
+        String email = dec(par(body,"email")), courseId = dec(par(body,"courseId")),
+               stEmail = dec(par(body,"studentEmail")), date = dec(par(body,"date"));
+        boolean present = "true".equalsIgnoreCase(par(body,"present"));
+        if (date.isEmpty()) date = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+        var ft = uni().findByEmail(email);
+        var fs = uni().findByEmail(stEmail);
+        var fc = uni().getCourses().stream().filter(c -> c.getCourseId().equals(courseId)).findFirst();
+        if (ft.isEmpty() || !(ft.get() instanceof Teacher t)) { send(ex, 403, "{\"error\":\"Not a teacher\"}"); return; }
+        if (fs.isEmpty() || !(fs.get() instanceof Student s)) { send(ex, 400, "{\"error\":\"Student not found\"}"); return; }
+        if (fc.isEmpty()) { send(ex, 400, "{\"error\":\"Course not found\"}"); return; }
+
+        fc.get().markAttendance(s, date, present, t);
+        save();
+        send(ex, 200, "{\"ok\":true,\"attendance\":" + String.format("%.0f", fc.get().getAttendancePercentage(s)) + "}");
+    }
+
+    static void handleAttendance(HttpExchange ex) throws IOException {
+        if (cors(ex)) return;
+        String email = dec(qp(ex, "email"));
+        var found = uni().findByEmail(email);
+        if (found.isEmpty() || !(found.get() instanceof Student s)) {
+            send(ex, 400, "{\"error\":\"Not found\"}"); return;
+        }
+        StringBuilder sb = new StringBuilder("[");
+        boolean first = true;
+        for (Course c : s.getCourses()) {
+            if (!first) sb.append(","); first = false;
+            int present = c.getPresentCount(s);
+            int total = c.getSessionCount(s);
+            double pct = c.getAttendancePercentage(s);
+            sb.append("{"); app(sb, "course", c.getName());
+            sb.append(","); app(sb, "code", c.getCourseId());
+            sb.append(",\"attended\":").append(present);
+            sb.append(",\"missed\":").append(total - present);
+            sb.append(",\"total\":").append(total);
+            sb.append(",\"percent\":").append(String.format("%.0f", pct));
+            sb.append(",\"admitted\":").append(pct >= 30).append("}");
+        }
+        sb.append("]");
+        send(ex, 200, sb.toString());
+    }
+
+    static void handleCourseAttendance(HttpExchange ex) throws IOException {
+        if (cors(ex)) return;
+        String courseId = dec(qp(ex, "courseId"));
+        var fc = uni().getCourses().stream().filter(c -> c.getCourseId().equals(courseId)).findFirst();
+        if (fc.isEmpty()) { send(ex, 400, "{\"error\":\"Course not found\"}"); return; }
+        Course course = fc.get();
+        StringBuilder sb = new StringBuilder("[");
+        List<Student> list = course.getStudents();
+        for (int i = 0; i < list.size(); i++) {
+            if (i > 0) sb.append(",");
+            Student s = list.get(i);
+            double pct = course.getAttendancePercentage(s);
+            sb.append("{"); app(sb, "email", s.getEmail());
+            sb.append(","); app(sb, "name", s.getFirstName() + " " + s.getLastName());
+            sb.append(",\"attended\":").append(course.getPresentCount(s));
+            sb.append(",\"total\":").append(course.getSessionCount(s));
+            sb.append(",\"percent\":").append(String.format("%.0f", pct));
+            sb.append(",\"admitted\":").append(pct >= 30).append("}");
+        }
+        sb.append("]");
         send(ex, 200, sb.toString());
     }
 

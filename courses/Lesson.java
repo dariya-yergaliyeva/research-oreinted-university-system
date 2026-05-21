@@ -29,6 +29,7 @@ public class Lesson implements Serializable {
         return attendanceList;
     }
     public void markAttendance(Student student, boolean present){
+        attendanceList.removeIf(a -> a.getStudent().equals(student));
         Attendance a = new Attendance(student, this, present);
         attendanceList.add(a);
         System.out.println(student.getFirstName() + (present ? " PRESENT" : " ABSENT"));

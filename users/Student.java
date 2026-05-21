@@ -35,14 +35,19 @@ public class Student extends User implements Comparable<Student> {
     }
 
     public void registerCourse(Course course) {
+        if (courses.contains(course)) {
+            System.out.println(getFirstName() + " already registered for " + course.getName());
+            return;
+        }
         if (credits + course.getCredits() > 21) {
             System.out.println("ERROR: Credit limit exceeded. Max 21 credits");
             return;
         }
-        courses.add(course);
         course.addStudent(this);
-        credits += course.getCredits();
-        System.out.println(getFirstName() + " registered for " + course.getName());
+        if (courses.contains(course)) {
+            credits += course.getCredits();
+            System.out.println(getFirstName() + " registered for " + course.getName());
+        }
     }
 
     public List<Mark> viewMarks() {

@@ -8,7 +8,7 @@
     <style>
         *{box-sizing:border-box;margin:0;padding:0}
 
-        /* ── THEME VARS ─────────────────────────────── */
+       
         :root{
           --bg:        #001a3d;
           --bg2:       #002a5c;
@@ -44,7 +44,7 @@
         button,select,input,textarea{font-family:'Inter',sans-serif}
         a{text-decoration:none;color:inherit}
 
-        /* ── LOGIN ─────────────────────────────────── */
+       
         #login{display:flex;align-items:center;justify-content:center;min-height:100vh}
         .lbox{width:390px;background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;padding:40px}
         .llogo{display:flex;align-items:center;gap:12px;margin-bottom:5px}
@@ -64,19 +64,19 @@
         .ldm{margin-top:16px;font-size:11px;color:var(--muted);text-align:center;line-height:1.9}
         .ldm b{color:var(--text)}
 
-        /* ── PORTAL ─────────────────────────────────── */
+
         #portal{display:none;height:100vh;flex-direction:row}
 
-        /* SIDEBAR */
+       
         .sb{width:56px;background:var(--sidebar);border-right:0.5px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:2px;flex-shrink:0;position:relative;z-index:200}
         .sbl{width:40px;height:40px;background:var(--bg3);border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;cursor:pointer}
 
-        /* SIDEBAR ICON with FLYOUT */
+        
         .sbi{width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--muted);cursor:pointer;position:relative;transition:all .12s;border:none;background:transparent}
         .sbi:hover,.sbi.on{background:var(--blue);color:#fff}
         .sbi svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
-        /* FLYOUT PANEL */
+       
         .flyout{position:absolute;left:56px;top:0;width:210px;background:var(--bg2);border:0.5px solid var(--border);border-radius:0 12px 12px 0;padding:14px 0;display:none;z-index:300;box-shadow:4px 0 20px rgba(0,0,0,.3)}
         .flyout.show{display:block}
         .ft{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:8px 14px 5px;font-weight:500}
@@ -336,9 +336,9 @@
                 <svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13"/><path d="M4 19h16"/><path d="M8 10h8M8 14h5"/></svg>
             </div>
             <div class="flyout" id="fly-courses">
-                <div class="ft">Курсы</div>
-                <div class="fl2 on" onclick="goPage('courses')">Доступные курсы</div>
-                <div class="fl2" onclick="goPage('courses');swTab('mc',null,'mc')">Мои курсы</div>
+                <div class="ft" data-i18n="courses">Курсы</div>
+                <div class="fl2 on" data-i18n="available_courses" onclick="goPage('courses')">Доступные курсы</div>
+                <div class="fl2" data-i18n="my_courses" onclick="goPage('courses');swTab('mc',null,'mc')">Мои курсы</div>
             </div>
         </div>
 
@@ -348,9 +348,9 @@
                 <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
             </div>
             <div class="flyout" id="fly-schedule">
-                <div class="ft">Расписание</div>
-                <div class="fl2 on" onclick="goPage('schedule')">Расписание занятий</div>
-                <div class="fl2" onclick="goPage('schedule')">Расписание экзаменов</div>
+                <div class="ft" data-i18n="schedule">Расписание</div>
+                <div class="fl2 on" data-i18n="schedule_title" onclick="goPage('schedule')">Расписание занятий</div>
+                <div class="fl2" data-i18n="exam_schedule" onclick="goPage('schedule')">Расписание экзаменов</div>
             </div>
         </div>
 
@@ -360,10 +360,10 @@
                 <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
             </div>
             <div class="flyout" id="fly-marks">
-                <div class="ft">Оценки</div>
-                <div class="fl2 on" onclick="goPage('marks')">Журнал оценок</div>
-                <div class="fl2" onclick="goPage('marks');swTab('tr2',null,'tr2')">Транскрипт</div>
-                <div class="fl2" onclick="goPage('marks');swTab('at',null,'at')">Посещаемость</div>
+                <div class="ft" data-i18n="marks">Оценки</div>
+                <div class="fl2 on" data-i18n="marks_title" onclick="goPage('marks')">Журнал оценок</div>
+                <div class="fl2" data-i18n="transcript" onclick="goPage('marks');swTab('tr2',null,'tr2')">Транскрипт</div>
+                <div class="fl2" data-i18n="attendance" onclick="goPage('marks');swTab('at',null,'at')">Посещаемость</div>
             </div>
         </div>
 
@@ -373,11 +373,11 @@
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v3l2 2"/></svg>
             </div>
             <div class="flyout" id="fly-research">
-                <div class="ft">Исследования</div>
-                <div class="fl2 on" onclick="goPage('research')">Мои статьи</div>
-                <div class="fl2" onclick="goPage('research')">H-индекс</div>
-                <div class="fl2" onclick="goPage('research')">Проекты</div>
-                <div class="fl2" onclick="goPage('research')">Журналы</div>
+                <div class="ft" data-i18n="research">Исследования</div>
+                <div class="fl2 on" data-i18n="my_papers" onclick="goPage('research')">Мои статьи</div>
+                <div class="fl2" data-i18n="h_index" onclick="goPage('research')">H-индекс</div>
+                <div class="fl2" data-i18n="projects" onclick="goPage('research')">Проекты</div>
+                <div class="fl2" data-i18n="journals" onclick="goPage('research')">Журналы</div>
             </div>
         </div>
 
@@ -387,10 +387,10 @@
                 <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
             </div>
             <div class="flyout" id="fly-messages">
-                <div class="ft">Сообщения</div>
-                <div class="fl2 on" onclick="goPage('messages')">Входящие</div>
-                <div class="fl2" onclick="goPage('messages')">Отправленные</div>
-                <div class="fl2" onclick="openSendMessage()">Написать сообщение</div>
+                <div class="ft" data-i18n="messages">Сообщения</div>
+                <div class="fl2 on" data-i18n="inbox" onclick="goPage('messages')">Входящие</div>
+                <div class="fl2" data-i18n="sent_box" onclick="goPage('messages')">Отправленные</div>
+                <div class="fl2" data-i18n="write_message" onclick="openSendMessage()">Написать сообщение</div>
             </div>
         </div>
 
@@ -400,10 +400,10 @@
                 <svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"/><path d="M7 8h10M7 12h6M7 16h4"/></svg>
             </div>
             <div class="flyout" id="fly-news">
-                <div class="ft">Новости</div>
-                <div class="fl2 on" onclick="goPage('news')">Все новости</div>
-                <div class="fl2" onclick="goPage('news')">Исследования</div>
-                <div class="fl2" onclick="goPage('news')">Объявления</div>
+                <div class="ft" data-i18n="news">Новости</div>
+                <div class="fl2 on" data-i18n="all_news" onclick="goPage('news')">Все новости</div>
+                <div class="fl2" data-i18n="research" onclick="goPage('news')">Исследования</div>
+                <div class="fl2" data-i18n="announcements" onclick="goPage('news')">Объявления</div>
             </div>
         </div>
 
@@ -413,9 +413,9 @@
                 <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
             </div>
             <div class="flyout" id="fly-tech">
-                <div class="ft">Тех. поддержка</div>
-                <div class="fl2 on" onclick="goPage('tech')">Все заявки</div>
-                <div class="fl2" onclick="goPage('tech');openNewRequest()">Новая заявка</div>
+                <div class="ft" data-i18n="tech">Тех. поддержка</div>
+                <div class="fl2 on" data-i18n="all_requests" onclick="goPage('tech')">Все заявки</div>
+                <div class="fl2" data-i18n="new_request_plain" onclick="goPage('tech');openNewRequest()">Новая заявка</div>
             </div>
         </div>
 
@@ -426,10 +426,10 @@
                     <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
                 <div class="flyout" id="fly-profile">
-                    <div class="ft">Профиль</div>
-                    <div class="fl2 on" onclick="goPage('profile')">Мой профиль</div>
-                    <div class="fl2" onclick="goPage('profile')">Настройки</div>
-                    <div class="fl2" onclick="doLogout()">Выйти</div>
+                    <div class="ft" data-i18n="profile">Профиль</div>
+                    <div class="fl2 on" data-i18n="my_profile" onclick="goPage('profile')">Мой профиль</div>
+                    <div class="fl2" data-i18n="settings" onclick="goPage('profile')">Настройки</div>
+                    <div class="fl2" data-i18n="logout" onclick="doLogout()">Выйти</div>
                 </div>
             </div>
             <!-- Logout -->
@@ -493,7 +493,7 @@
 </div>
 
 <script>
-    // ── DATA ────────────────────────────────────────
+  
     const USERS={
       'admin@kbtu.kz':    {pass:'admin123',   fn:'Admin',     ln:'KBTU',         role:'Admin'},
       'prof@kbtu.kz':     {pass:'prof123',    fn:'Dariya',    ln:'Yergaliyeva',  role:'Teacher', pos:'PROFESSOR', rating:10.0},
@@ -538,10 +538,11 @@
     ];
 
     let CU=null, regCourses=[], jrnSubs=[], darkMode=true;
-    let currentLang='RU';
+    const LANG_KEY='kbtu_lang';
+    let currentLang=(function(){try{return localStorage.getItem(LANG_KEY)||'RU'}catch(e){return 'RU'}})();
     let JOURNALS=[], USERLIST=[...DEFAULT_USERLIST], COURSESEARCH='';
 
-    // ── ROLE-BASED MENU VISIBILITY ──────────────────
+
     const MENU_VIS={
       Student:         ['home','courses','schedule','marks','research','messages','news','tech','profile'],
       GraduateStudent: ['home','courses','schedule','marks','research','messages','news','tech','profile'],
@@ -581,6 +582,7 @@
     };
 
     let MESSAGES={inbox:[],sent:[]}, MSGSEARCH='', ACTIVE_CHAT=null;
+    let ATTEND=[];
 
     // ── LOCAL MESSAGE STORE (shared across sessions in same browser) ──
     const MSG_STORE_KEY='kbtu_local_messages';
@@ -608,7 +610,7 @@
     }
     async function loadAllData(){
       if(!CU?.email)return;
-      const [courses,myCourses,marks,papers,news,requests,journals,users,msgs]=await Promise.all([
+      const [courses,myCourses,marks,papers,news,requests,journals,users,msgs,attend]=await Promise.all([
         API.get('/api/courses'),
         API.get('/api/my-courses',{email:CU.email}),
         API.get('/api/marks',{email:CU.email}),
@@ -618,19 +620,24 @@
         API.get('/api/journals',{email:CU.email}),
         API.get('/api/users'),
         API.get('/api/messages',{email:CU.email}),
+        API.get('/api/attendance',{email:CU.email}),
       ]);
       MESSAGES={inbox:[],sent:[]};
       if(msgs&&msgs.inbox)MESSAGES={inbox:msgs.inbox,sent:msgs.sent||[]};
       hydrateMessagesForCU();
       if(Array.isArray(courses)){
         COURSES.length=0;
-        const rooms={CS101:'Ауд.301',MATH201:'Ауд.205',PHY101:'Ауд.118',OG101:'Ауд.210'};
-        courses.forEach(c=>COURSES.push({id:c.id,name:c.name,credits:c.credits,type:c.type,students:c.students,teacher:c.teacher||'—',room:rooms[c.id]||'Ауд.???'}));
+        const RM=t('room_abbr');const rooms={CS101:RM+'301',MATH201:RM+'205',PHY101:RM+'118',OG101:RM+'210'};
+        courses.forEach(c=>COURSES.push({id:c.id,name:c.name,credits:c.credits,type:c.type,students:c.students,teacher:c.teacher||'—',room:rooms[c.id]||(RM+'???')}));
       }
       if(Array.isArray(myCourses))regCourses=myCourses.map(c=>c.id);
       if(Array.isArray(marks)){
         MARKS.length=0;
-        marks.forEach(m=>MARKS.push({course:m.course,code:m.code,credits:m.credits,rk1:m.a1,rk2:m.a2,exam:m.exam,grade:m.grade||'—'}));
+        marks.forEach(m=>MARKS.push({course:m.course,code:m.code,credits:m.credits,rk1:m.a1,rk2:m.a2,exam:m.exam,grade:m.grade||'—',admitted:m.admitted!==false,attendance:m.attendance}));
+      }
+      if(Array.isArray(attend)){
+        ATTEND.length=0;
+        attend.forEach(a=>ATTEND.push({course:a.course,code:a.code,attended:a.attended,missed:a.missed,total:a.total,percent:a.percent,admitted:a.admitted!==false}));
       }
       if(papers&&Array.isArray(papers.papers)){
         PAPERS=papers.papers.map(p=>({title:p.title,journal:p.journal,date:p.date,cite:p.citations,doi:p.doi}));
@@ -643,7 +650,7 @@
       }
       if(Array.isArray(requests)){
         REQUESTS.length=0;
-        const stMap={NEW:['snew','Новая'],VIEWED:['sview','Просмотрена'],ACCEPTED:['sacc','Принята'],REJECTED:['srej','Отклонена'],DONE:['sdone','Выполнена']};
+        const stMap={NEW:['snew',t('st_new')],VIEWED:['sview',t('st_viewed')],ACCEPTED:['sacc',t('st_accepted')],REJECTED:['srej',t('st_rejected')],DONE:['sdone',t('st_done')]};
         requests.forEach(r=>{const sm=stMap[r.status]||['sview',r.status];REQUESTS.push({id:'#TK-'+(1000+r.idx),desc:r.desc,date:'',status:sm[0],st:sm[1],idx:r.idx,by:r.by})});
       }
       if(Array.isArray(journals))JOURNALS=journals;
@@ -654,7 +661,7 @@
       }
     }
 
-    // ── I18N ─────────────────────────────────────────
+  
     const I18N={
       RU:{
         home:'Главная',courses:'Курсы',schedule:'Расписание',marks:'Оценки',research:'Исследования',messages:'Сообщения',news:'Новости',tech:'Тех. поддержка',profile:'Профиль',
@@ -671,6 +678,7 @@
         schedule_title:'Расписание занятий',exam_schedule:'Расписание экзаменов',
         marks_title:'Журнал оценок',rk1:'РК1',rk2:'РК2',exam:'Экзамен',grade:'Оценка',transcript:'Транскрипт',attendance:'Посещаемость',
         download_pdf:'Скачать PDF',attended:'Посещено',missed:'Пропущено',
+        not_admitted:'не допущен',admitted:'допущен',admission:'Допуск',no_attendance:'Нет данных о посещаемости',mark_attendance:'Отметить посещаемость',date:'Дата',present:'Присутствовал',absent:'Отсутствовал',att_saved:'Посещаемость сохранена',not_admitted_toast:'Студент не допущен к финальному экзамену',
         messages_title:'Сообщения',chats_contacts:'Чаты и контакты',search_contact:'Поиск контакта (имя/email/роль)...',
         chats:'Чаты',new_chat:'Новый чат',no_one_found:'Никого не найдено',no_chats:'У вас пока нет чатов.<br><br>Найдите контакт через поиск выше.',
         choose_chat:'Выберите чат слева или найдите контакт через поиск',
@@ -690,6 +698,18 @@
         offline_saved:'⚠ Offline-режим: сообщение сохранено локально',
         enter_msg_text:'Введите текст сообщения',
         kbtu_subtitle:'Казахстанско-Британский технический университет',
+        research_sub:'Статьи, проекты, h-индекс',hindex_papers:'{n} статей с {n}+ цитированиями',total_citations:'Всего: {n} цитирований',
+        papers_label:'Статей',projects_label:'Проектов',my_papers:'Мои статьи',by_citations:'По цитированиям',by_date:'По дате',add_short:'+ Добавить',
+        journals_subs:'Журналы · Подписки',journal_col:'Журнал',subscribed:'Подписан',subscribe_btn:'Подписаться',
+        title_col:'Название',citations_col:'Цит.',format_col:'Формат',projects:'Проекты',
+        add_paper_title:'Добавить статью',title_ph:'Название статьи',cite_title:'Цитирование',close:'Закрыть',copy:'Копировать',copied:'Скопировано!',add_btn:'Добавить',enter_title:'Введите название',paper_added:'✓ Статья добавлена! Новость опубликована автоматически.',
+        journals:'Журналы',inbox:'Входящие',sent_box:'Отправленные',all_news:'Все новости',announcements:'Объявления',all_requests:'Все заявки',new_request_plain:'Новая заявка',my_profile:'Мой профиль',settings:'Настройки',
+        tech_requests:'Тех. заявки',requests_lc:'заявок',new_lc:'новых',total_lc:'всего',active_lc:'активных',
+        qa_register:'Зарегистрироваться',qa_register_sub:'Записаться на курс',qa_rate:'Оценить преподавателя',qa_sub_journal:'Подписка на журнал',qa_tech:'Тех. заявка',qa_tech_sub:'Отправить запрос',qa_put_mark:'Выставить оценку',qa_put_mark_sub:'Студентам курса',att_present_absent:'Присутствие / отсутствие',qa_complaint:'Жалоба декану',to_staff:'Сотруднику',to_staff_student:'Сотруднику/студенту',research_actions:'Действия исследователя',papers_projects:'Статьи, проекты',qa_message:'Сообщение',contact_user:'Связаться с пользователем',any_user:'Любому пользователю',requests_word:'Заявки',go_section:'Перейти к разделу',choose_section:'Выберите нужный раздел',published:'опубликовано',
+        sm_academic:'📚 Учебный процесс',sm_research:'🔬 Исследования',sm_services:'📋 Сервисы',academic_calendar:'Академический календарь',ind_plan:'Инд. учебный план',online_reg:'Онлайн-регистрация',subscriptions:'Подписки',gpa_calc:'GPA калькулятор',library:'Библиотека',student_orgs:'Студ. объединения',events:'Мероприятия',
+        period:'Период',week:'Неделя',time_col:'Время',mon:'Пн',tue:'Вт',wed:'Ср',thu:'Чт',fri:'Пт',lecture:'лекция',practice:'практ.',room_abbr:'Ауд.',lunch:'Обед',sched_dates:'26 янв — 19 мая 2026',
+        cancel:'Отмена',save:'Сохранить',course_lbl:'Курс',student_lbl:'Студент',urgency_lbl:'Срочность',recipient_lbl:'Получатель',msg_lbl:'Сообщение',rating_lbl:'Оцените (1-10)',problem_lbl:'Опишите проблему',send_btn:'Отправить',subscribe_title:'Подписка на журнал',journal_lbl:'Журнал',rate_title:'Оценить преподавателя',complaint_title:'Жалоба декану',send_msg_title:'Написать сообщение',new_req_title:'Новая тех. заявка',saved_ok:'✓ Сохранено',sent_ok:'✓ Отправлено',subscribed_ok:'✓ Вы подписались',rated_ok:'✓ Оценка сохранена',enter_text:'Введите текст',
+        error_word:'Ошибка',credit_limit:'Превышен лимит 21 кредит!',you_prefix:'Вы',st_new:'Новая',st_viewed:'Просмотрена',st_accepted:'Принята',st_rejected:'Отклонена',st_done:'Выполнена',footer_portal:'Академический портал',footer_library:'Библиотека KBTU',footer_research:'Research Hub',
       },
       EN:{
         home:'Home',courses:'Courses',schedule:'Schedule',marks:'Marks',research:'Research',messages:'Messages',news:'News',tech:'Tech support',profile:'Profile',
@@ -706,6 +726,7 @@
         schedule_title:'Class schedule',exam_schedule:'Exam schedule',
         marks_title:'Grade book',rk1:'A1',rk2:'A2',exam:'Final',grade:'Grade',transcript:'Transcript',attendance:'Attendance',
         download_pdf:'Download PDF',attended:'Attended',missed:'Missed',
+        not_admitted:'not admitted',admitted:'admitted',admission:'Admission',no_attendance:'No attendance data',mark_attendance:'Mark attendance',date:'Date',present:'Present',absent:'Absent',att_saved:'Attendance saved',not_admitted_toast:'Student not admitted to the final exam',
         messages_title:'Messages',chats_contacts:'Chats and contacts',search_contact:'Search contact (name/email/role)...',
         chats:'Chats',new_chat:'New chat',no_one_found:'No one found',no_chats:'You have no chats yet.<br><br>Find a contact using the search above.',
         choose_chat:'Select a chat on the left or find a contact via search',
@@ -725,6 +746,18 @@
         offline_saved:'⚠ Offline mode: message saved locally',
         enter_msg_text:'Enter message text',
         kbtu_subtitle:'Kazakh-British Technical University',
+        research_sub:'Papers, projects, h-index',hindex_papers:'{n} papers with {n}+ citations',total_citations:'Total: {n} citations',
+        papers_label:'Papers',projects_label:'Projects',my_papers:'My papers',by_citations:'By citations',by_date:'By date',add_short:'+ Add',
+        journals_subs:'Journals · Subscriptions',journal_col:'Journal',subscribed:'Subscribed',subscribe_btn:'Subscribe',
+        title_col:'Title',citations_col:'Cit.',format_col:'Format',projects:'Projects',
+        add_paper_title:'Add paper',title_ph:'Paper title',cite_title:'Citation',close:'Close',copy:'Copy',copied:'Copied!',add_btn:'Add',enter_title:'Enter title',paper_added:'✓ Paper added! News published automatically.',
+        journals:'Journals',inbox:'Inbox',sent_box:'Sent',all_news:'All news',announcements:'Announcements',all_requests:'All requests',new_request_plain:'New request',my_profile:'My profile',settings:'Settings',
+        tech_requests:'Tech requests',requests_lc:'requests',new_lc:'new',total_lc:'total',active_lc:'active',
+        qa_register:'Register',qa_register_sub:'Enroll in a course',qa_rate:'Rate a teacher',qa_sub_journal:'Subscribe to journal',qa_tech:'Tech request',qa_tech_sub:'Submit a request',qa_put_mark:'Put a mark',qa_put_mark_sub:'Course students',att_present_absent:'Present / absent',qa_complaint:'Complaint to dean',to_staff:'To staff',to_staff_student:'To staff/student',research_actions:'Research actions',papers_projects:'Papers, projects',qa_message:'Message',contact_user:'Contact a user',any_user:'Any user',requests_word:'Requests',go_section:'Go to section',choose_section:'Choose a section',published:'published',
+        sm_academic:'📚 Academics',sm_research:'🔬 Research',sm_services:'📋 Services',academic_calendar:'Academic calendar',ind_plan:'Individual study plan',online_reg:'Online registration',subscriptions:'Subscriptions',gpa_calc:'GPA calculator',library:'Library',student_orgs:'Student organizations',events:'Events',
+        period:'Period',week:'Week',time_col:'Time',mon:'Mon',tue:'Tue',wed:'Wed',thu:'Thu',fri:'Fri',lecture:'lecture',practice:'practice',room_abbr:'Rm.',lunch:'Lunch',sched_dates:'Jan 26 — May 19, 2026',
+        cancel:'Cancel',save:'Save',course_lbl:'Course',student_lbl:'Student',urgency_lbl:'Urgency',recipient_lbl:'Recipient',msg_lbl:'Message',rating_lbl:'Rate (1-10)',problem_lbl:'Describe the problem',send_btn:'Send',subscribe_title:'Subscribe to journal',journal_lbl:'Journal',rate_title:'Rate a teacher',complaint_title:'Complaint to dean',send_msg_title:'Write a message',new_req_title:'New tech request',saved_ok:'✓ Saved',sent_ok:'✓ Sent',subscribed_ok:'✓ Subscribed',rated_ok:'✓ Rating saved',enter_text:'Enter text',
+        error_word:'Error',credit_limit:'21 credit limit exceeded!',you_prefix:'You',st_new:'New',st_viewed:'Viewed',st_accepted:'Accepted',st_rejected:'Rejected',st_done:'Done',footer_portal:'Academic portal',footer_library:'KBTU Library',footer_research:'Research Hub',
       },
       KZ:{
         home:'Басты бет',courses:'Курстар',schedule:'Кесте',marks:'Бағалар',research:'Зерттеу',messages:'Хабарламалар',news:'Жаңалықтар',tech:'Тех. қолдау',profile:'Профиль',
@@ -741,6 +774,7 @@
         schedule_title:'Сабақ кестесі',exam_schedule:'Емтихан кестесі',
         marks_title:'Бағалар журналы',rk1:'РК1',rk2:'РК2',exam:'Емтихан',grade:'Баға',transcript:'Транскрипт',attendance:'Қатысу',
         download_pdf:'PDF жүктеп алу',attended:'Қатысқан',missed:'Жіберілген',
+        not_admitted:'жіберілмеген',admitted:'жіберілген',admission:'Жіберу',no_attendance:'Қатысу деректері жоқ',mark_attendance:'Қатысуды белгілеу',date:'Күні',present:'Қатысты',absent:'Қатыспады',att_saved:'Қатысу сақталды',not_admitted_toast:'Студент финалдық емтиханға жіберілмеген',
         messages_title:'Хабарламалар',chats_contacts:'Чаттар мен контактілер',search_contact:'Контакт іздеу (аты/email/рөлі)...',
         chats:'Чаттар',new_chat:'Жаңа чат',no_one_found:'Ешкім табылмады',no_chats:'Сізде әлі чат жоқ.<br><br>Жоғарыдағы іздеуден контакт табыңыз.',
         choose_chat:'Сол жақтан чат таңдаңыз немесе іздеу арқылы контакт табыңыз',
@@ -760,6 +794,18 @@
         offline_saved:'⚠ Offline режимі: хабарлама жергілікті сақталды',
         enter_msg_text:'Хабарлама мәтінін енгізіңіз',
         kbtu_subtitle:'Қазақстан-Британ техникалық университеті',
+        research_sub:'Мақалалар, жобалар, h-индекс',hindex_papers:'{n}+ дәйексөзі бар {n} мақала',total_citations:'Барлығы: {n} дәйексөз',
+        papers_label:'Мақала',projects_label:'Жобалар',my_papers:'Менің мақалаларым',by_citations:'Дәйексөз бойынша',by_date:'Күні бойынша',add_short:'+ Қосу',
+        journals_subs:'Журналдар · Жазылымдар',journal_col:'Журнал',subscribed:'Жазылған',subscribe_btn:'Жазылу',
+        title_col:'Атауы',citations_col:'Дәйек.',format_col:'Формат',projects:'Жобалар',
+        add_paper_title:'Мақала қосу',title_ph:'Мақала атауы',cite_title:'Дәйексөз',close:'Жабу',copy:'Көшіру',copied:'Көшірілді!',add_btn:'Қосу',enter_title:'Атауын енгізіңіз',paper_added:'✓ Мақала қосылды! Жаңалық автоматты түрде жарияланды.',
+        journals:'Журналдар',inbox:'Кіріс',sent_box:'Жіберілген',all_news:'Барлық жаңалықтар',announcements:'Хабарландырулар',all_requests:'Барлық өтінімдер',new_request_plain:'Жаңа өтінім',my_profile:'Менің профилім',settings:'Параметрлер',
+        tech_requests:'Тех. өтінімдер',requests_lc:'өтінім',new_lc:'жаңа',total_lc:'барлығы',active_lc:'белсенді',
+        qa_register:'Тіркелу',qa_register_sub:'Курсқа жазылу',qa_rate:'Оқытушыны бағалау',qa_sub_journal:'Журналға жазылу',qa_tech:'Тех. өтінім',qa_tech_sub:'Сұраныс жіберу',qa_put_mark:'Баға қою',qa_put_mark_sub:'Курс студенттеріне',att_present_absent:'Қатысу / қатыспау',qa_complaint:'Деканға шағым',to_staff:'Қызметкерге',to_staff_student:'Қызметкер/студентке',research_actions:'Зерттеу әрекеттері',papers_projects:'Мақалалар, жобалар',qa_message:'Хабарлама',contact_user:'Қолданушымен байланысу',any_user:'Кез келген қолданушыға',requests_word:'Өтінімдер',go_section:'Бөлімге өту',choose_section:'Қажетті бөлімді таңдаңыз',published:'жарияланды',
+        sm_academic:'📚 Оқу процесі',sm_research:'🔬 Зерттеулер',sm_services:'📋 Сервистер',academic_calendar:'Академиялық күнтізбе',ind_plan:'Жеке оқу жоспары',online_reg:'Онлайн тіркеу',subscriptions:'Жазылымдар',gpa_calc:'GPA калькуляторы',library:'Кітапхана',student_orgs:'Студ. бірлестіктер',events:'Іс-шаралар',
+        period:'Кезең',week:'Апта',time_col:'Уақыт',mon:'Дс',tue:'Сс',wed:'Ср',thu:'Бс',fri:'Жм',lecture:'дәріс',practice:'практ.',room_abbr:'Ауд.',lunch:'Түскі ас',sched_dates:'26 қаң — 19 мам 2026',
+        cancel:'Болдырмау',save:'Сақтау',course_lbl:'Курс',student_lbl:'Студент',urgency_lbl:'Шұғылдық',recipient_lbl:'Алушы',msg_lbl:'Хабарлама',rating_lbl:'Бағалаңыз (1-10)',problem_lbl:'Мәселені сипаттаңыз',send_btn:'Жіберу',subscribe_title:'Журналға жазылу',journal_lbl:'Журнал',rate_title:'Оқытушыны бағалау',complaint_title:'Деканға шағым',send_msg_title:'Хабарлама жазу',new_req_title:'Жаңа тех. өтінім',saved_ok:'✓ Сақталды',sent_ok:'✓ Жіберілді',subscribed_ok:'✓ Жазылдыңыз',rated_ok:'✓ Баға сақталды',enter_text:'Мәтін енгізіңіз',
+        error_word:'Қате',credit_limit:'21 кредит шегінен асып кетті!',you_prefix:'Сіз',st_new:'Жаңа',st_viewed:'Қаралды',st_accepted:'Қабылданды',st_rejected:'Қабылданбады',st_done:'Орындалды',footer_portal:'Академиялық портал',footer_library:'KBTU кітапханасы',footer_research:'Research Hub',
       }
     };
     function t(key){return (I18N[currentLang]||I18N.RU)[key]||key}
@@ -815,13 +861,23 @@
     }
 
     // ── LANG ─────────────────────────────────────────
-    function setLL(b,l){document.querySelectorAll('.llb').forEach(x=>x.classList.remove('on'));b.classList.add('on');currentLang=l;applyLoginI18N();}
+    function saveLang(l){currentLang=l;try{localStorage.setItem(LANG_KEY,l)}catch(e){}}
+    function applyStaticI18N(){
+      document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.getAttribute('data-i18n'));});
+    }
+    function syncLangUI(){
+      document.querySelectorAll('.llb').forEach(b=>b.classList.toggle('on',b.textContent.trim()===currentLang));
+      const lc=document.getElementById('lang-cur');if(lc)lc.textContent=currentLang+' ▾';
+      document.querySelectorAll('.lang-opt').forEach(o=>o.classList.toggle('on',o.textContent.trim()===currentLang));
+      applyLoginI18N();
+      applyStaticI18N();
+    }
+    function setLL(b,l){saveLang(l);syncLangUI();}
     function toggleLangDrop(){document.getElementById('lang-drop').classList.toggle('show')}
     function selectLang(l){
-      currentLang=l;
-      document.getElementById('lang-cur').textContent=l+' ▾';
-      document.querySelectorAll('.lang-opt').forEach(o=>{o.classList.toggle('on',o.textContent===l)});
+      saveLang(l);
       document.getElementById('lang-drop').classList.remove('show');
+      syncLangUI();
       toast(t('language')+': '+l);
       applyI18N();
     }
@@ -868,6 +924,7 @@
       document.getElementById('login').style.display='none';
       document.getElementById('portal').style.display='flex';
       document.getElementById('uav').textContent=(CU.fn[0]+CU.ln[0]).toUpperCase();
+      syncLangUI();
       await loadAllData();
       applySidebarVisibility();
       goPage('home');
@@ -922,11 +979,11 @@
         </div>
         <div id="p-ov" class="pane on">
           <div class="cg">
-            ${pageAllowed('courses')?`<div class="card" onclick="goPage('courses')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13"/><path d="M4 19h16M8 10h8M8 14h5"/></svg></div><h3>${r==='Manager'||r==='Admin'?'Курсы':'Мои курсы'}</h3><p>${regCourses.length?regCourses.slice(0,2).map(id=>{const c=COURSES.find(x=>x.id===id);return c?c.id+' · '+c.name:''}).join('<br>'):COURSES.length+' дисциплин'}</p></div>`:''}
-            ${pageAllowed('marks')?`<div class="card" onclick="goPage('marks')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><h3>Оценки</h3><p>GPA: ${CU.gpa??'—'} · ${totalCredits}/21 кр.</p></div>`:''}
-            ${pageAllowed('research')&&(CU.hasResearch||r==='GraduateStudent')?`<div class="card" onclick="goPage('research')"><div class="card-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div><h3>Исследования</h3><p>H-индекс: ${CU.hindex??'—'} · Статей: ${PAPERS.length}</p></div>`:''}
-            ${pageAllowed('tech')&&(r==='TechSupportSpecialist'||r==='TechSupport'||r==='Admin')?`<div class="card" onclick="goPage('tech')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div><h3>Тех. заявки</h3><p>${REQUESTS.length} заявок · ${newReqs} новых</p></div>`:''}
-            <div class="card" onclick="goPage('news')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"/><path d="M7 8h10M7 12h6"/></svg></div><h3>Новости</h3><p>${NEWS.length} новостей</p></div>
+            ${pageAllowed('courses')?`<div class="card" onclick="goPage('courses')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13"/><path d="M4 19h16M8 10h8M8 14h5"/></svg></div><h3>${r==='Manager'||r==='Admin'?t('courses'):t('my_courses')}</h3><p>${regCourses.length?regCourses.slice(0,2).map(id=>{const c=COURSES.find(x=>x.id===id);return c?c.id+' · '+c.name:''}).join('<br>'):COURSES.length+' '+t('disciplines')}</p></div>`:''}
+            ${pageAllowed('marks')?`<div class="card" onclick="goPage('marks')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><h3>${t('marks')}</h3><p>GPA: ${CU.gpa??'—'} · ${totalCredits}/21 ${t('cred')}</p></div>`:''}
+            ${pageAllowed('research')&&(CU.hasResearch||r==='GraduateStudent')?`<div class="card" onclick="goPage('research')"><div class="card-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div><h3>${t('research')}</h3><p>${t('h_index')}: ${CU.hindex??'—'} · ${t('papers_label')}: ${PAPERS.length}</p></div>`:''}
+            ${pageAllowed('tech')&&(r==='TechSupportSpecialist'||r==='TechSupport'||r==='Admin')?`<div class="card" onclick="goPage('tech')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div><h3>${t('tech_requests')}</h3><p>${REQUESTS.length} ${t('requests_lc')} · ${newReqs} ${t('new_lc')}</p></div>`:''}
+            <div class="card" onclick="goPage('news')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"/><path d="M7 8h10M7 12h6"/></svg></div><h3>${t('news')}</h3><p>${NEWS.length} ${t('news_cnt')}</p></div>
           </div>
           <div style="font-size:13px;font-weight:500;margin-bottom:10px">${t('pinned_news')}</div>
           <div class="tw"><table>
@@ -937,36 +994,37 @@
         <div id="p-qa" class="pane">
           <div class="cg">
             ${CU.role==='Student'?`
-              <div class="card" onclick="goPage('courses')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13"/></svg></div><h3>Зарегистрироваться</h3><p>Записаться на курс</p></div>
-              <div class="card" onclick="openRateTeacher()"><div class="card-ic"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><h3>Оценить преподавателя</h3><p>Dariya — рейтинг: 10.0</p></div>
-              <div class="card" onclick="openSubJournal()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"/></svg></div><h3>Подписка на журнал</h3><p>Journal of CS · 1 статья</p></div>
-              <div class="card" onclick="openNewRequest()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div><h3>Тех. заявка</h3><p>Отправить запрос</p></div>
+              <div class="card" onclick="goPage('courses')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13"/></svg></div><h3>${t('qa_register')}</h3><p>${t('qa_register_sub')}</p></div>
+              <div class="card" onclick="openRateTeacher()"><div class="card-ic"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><h3>${t('qa_rate')}</h3><p>Dariya — ${t('rating')}: 10.0</p></div>
+              <div class="card" onclick="openSubJournal()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"/></svg></div><h3>${t('qa_sub_journal')}</h3><p>Journal of CS · 1</p></div>
+              <div class="card" onclick="openNewRequest()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div><h3>${t('qa_tech')}</h3><p>${t('qa_tech_sub')}</p></div>
             `:CU.role==='Teacher'?`
-              <div class="card" onclick="openPutMark()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/></svg></div><h3>Выставить оценку</h3><p>Студентам курса CS101</p></div>
-              <div class="card" onclick="openComplaint()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div><h3>Жалоба декану</h3><p>LOW / MEDIUM / HIGH</p></div>
-              <div class="card" onclick="openSendMessage()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>Написать сообщение</h3><p>Сотруднику</p></div>
-              <div class="card" onclick="goPage('research')"><div class="card-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/></svg></div><h3>Research actions</h3><p>Статьи, проекты</p></div>
+              <div class="card" onclick="openPutMark()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/></svg></div><h3>${t('qa_put_mark')}</h3><p>${t('qa_put_mark_sub')}</p></div>
+              <div class="card" onclick="openMarkAttendance()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><h3>${t('mark_attendance')}</h3><p>${t('att_present_absent')}</p></div>
+              <div class="card" onclick="openComplaint()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div><h3>${t('qa_complaint')}</h3><p>LOW / MEDIUM / HIGH</p></div>
+              <div class="card" onclick="openSendMessage()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>${t('write_message')}</h3><p>${t('to_staff')}</p></div>
+              <div class="card" onclick="goPage('research')"><div class="card-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/></svg></div><h3>${t('research_actions')}</h3><p>${t('papers_projects')}</p></div>
             `:CU.role==='Manager'?`
-              <div class="card" onclick="goPage('courses')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13"/></svg></div><h3>Курсы</h3><p>${COURSES.length} дисциплин</p></div>
-              <div class="card" onclick="openSendMessage()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>Написать сообщение</h3><p>Сотруднику/студенту</p></div>
-              <div class="card" onclick="goPage('news')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14"/></svg></div><h3>Новости</h3><p>${NEWS.length} опубликовано</p></div>
+              <div class="card" onclick="goPage('courses')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13"/></svg></div><h3>${t('courses')}</h3><p>${COURSES.length} ${t('disciplines')}</p></div>
+              <div class="card" onclick="openSendMessage()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>${t('write_message')}</h3><p>${t('to_staff_student')}</p></div>
+              <div class="card" onclick="goPage('news')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14"/></svg></div><h3>${t('news')}</h3><p>${NEWS.length} ${t('published')}</p></div>
             `:CU.role==='TechSupportSpecialist'||CU.role==='TechSupport'?`
-              <div class="card" onclick="goPage('tech')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77"/></svg></div><h3>Заявки</h3><p>${newReqs} новых · ${REQUESTS.length} всего</p></div>
-              <div class="card" onclick="openSendMessage()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>Сообщение</h3><p>Связаться с юзером</p></div>
+              <div class="card" onclick="goPage('tech')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77"/></svg></div><h3>${t('requests_word')}</h3><p>${newReqs} ${t('new_lc')} · ${REQUESTS.length} ${t('total_lc')}</p></div>
+              <div class="card" onclick="openSendMessage()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>${t('qa_message')}</h3><p>${t('contact_user')}</p></div>
             `:CU.role==='Admin'?`
-              <div class="card" onclick="goPage('tech')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6"/></svg></div><h3>Все заявки</h3><p>${REQUESTS.length} активных</p></div>
-              <div class="card" onclick="openSendMessage()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>Сообщение</h3><p>Любому юзеру</p></div>
-              <div class="card" onclick="goPage('news')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14"/></svg></div><h3>Новости</h3><p>${NEWS.length}</p></div>
-            `:`<div class="card" onclick="goPage('news')"><h3>Перейти к разделу</h3><p>Выберите нужный раздел</p></div>`}
+              <div class="card" onclick="goPage('tech')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6"/></svg></div><h3>${t('all_requests')}</h3><p>${REQUESTS.length} ${t('active_lc')}</p></div>
+              <div class="card" onclick="openSendMessage()"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>${t('qa_message')}</h3><p>${t('any_user')}</p></div>
+              <div class="card" onclick="goPage('news')"><div class="card-ic"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14"/></svg></div><h3>${t('news')}</h3><p>${NEWS.length}</p></div>
+            `:`<div class="card" onclick="goPage('news')"><h3>${t('go_section')}</h3><p>${t('choose_section')}</p></div>`}
           </div>
         </div>
         <div id="p-sm" class="pane">
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
             ${[
-              ['📚 Учебный процесс',['Академический календарь','Инд. учебный план','Расписание','Журнал оценок','Транскрипт','Онлайн-регистрация'],'courses'],
-              ['🔬 Исследования',['Мои статьи','H-индекс','Проекты','Журналы','Подписки'],'research'],
-              ['📋 Сервисы',['GPA калькулятор','Библиотека','Студ. объединения','Мероприятия','Тех. поддержка'],'tech'],
-            ].map(([t,ll,pg])=>`<div class="tw" style="padding:14px;border-radius:12px"><div style="font-size:12px;font-weight:500;margin-bottom:9px">${t}</div>${ll.map(l=>`<div onclick="goPage('${pg}')" style="padding:6px 6px;border-radius:6px;font-size:12px;color:var(--muted);cursor:pointer;transition:color .1s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">${l}</div>`).join('')}</div>`).join('')}
+              [t('sm_academic'),[t('academic_calendar'),t('ind_plan'),t('schedule'),t('marks_title'),t('transcript'),t('online_reg')],'courses'],
+              [t('sm_research'),[t('my_papers'),t('h_index'),t('projects'),t('journals'),t('subscriptions')],'research'],
+              [t('sm_services'),[t('gpa_calc'),t('library'),t('student_orgs'),t('events'),t('tech')],'tech'],
+            ].map(([hdr,ll,pg])=>`<div class="tw" style="padding:14px;border-radius:12px"><div style="font-size:12px;font-weight:500;margin-bottom:9px">${hdr}</div>${ll.map(l=>`<div onclick="goPage('${pg}')" style="padding:6px 6px;border-radius:6px;font-size:12px;color:var(--muted);cursor:pointer;transition:color .1s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">${l}</div>`).join('')}</div>`).join('')}
           </div>
         </div>
       `);
@@ -1027,37 +1085,38 @@
     async function registerCourse(id,name){
       const total=regCourses.reduce((a,r)=>{const c=COURSES.find(x=>x.id===r);return a+(c?c.credits:0)},0);
       const nc=COURSES.find(x=>x.id===id);
-      if(nc&&total+nc.credits>21){toast('Превышен лимит 21 кредит!');return;}
+      if(nc&&total+nc.credits>21){toast(t('credit_limit'));return;}
       const res=await API.post('/api/register',{email:CU.email,courseId:id});
       if(res&&res.ok){
         regCourses.push(id);if(nc)nc.students++;
-        toast(`✓ ${CU.fn} enrolled in ${name}`);
+        toast(`✓ ${CU.fn} — ${name}`);
         await loadAllData();renderCourses();
-      }else if(res&&res.error){toast('Ошибка: '+res.error);}
+      }else if(res&&res.error){toast(t('error_word')+': '+res.error);}
       else{regCourses.push(id);if(nc)nc.students++;toast(`✓ ${CU.fn} enrolled in ${name} (offline)`);renderCourses();}
     }
 
     // ── SCHEDULE ─────────────────────────────────────
     function renderSchedule(){
+      const RM=t('room_abbr'),LEC=t('lecture'),PR=t('practice');
       setC(`
-        <div class="pt">Расписание занятий</div>
-        <div class="ps">2025–2026 · Период 2 · 26 янв — 19 мая 2026</div>
+        <div class="pt">${t('schedule_title')}</div>
+        <div class="ps">2025–2026 · ${t('period')} 2 · ${t('sched_dates')}</div>
         <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
           <select><option>2025–2026</option></select>
-          <select><option>Период 2</option><option>Период 1</option></select>
-          <select><option>Неделя 1</option><option>Неделя 2</option><option>Неделя 3</option></select>
-          <button class="btn" style="font-size:11px;padding:5px 12px">Расписание экзаменов</button>
+          <select><option>${t('period')} 2</option><option>${t('period')} 1</option></select>
+          <select><option>${t('week')} 1</option><option>${t('week')} 2</option><option>${t('week')} 3</option></select>
+          <button class="btn" style="font-size:11px;padding:5px 12px">${t('exam_schedule')}</button>
         </div>
         <div class="tw" style="overflow:auto">
           <table style="min-width:560px;table-layout:fixed">
-            <thead><tr><th style="width:80px">Время</th><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th></tr></thead>
+            <thead><tr><th style="width:80px">${t('time_col')}</th><th>${t('mon')}</th><th>${t('tue')}</th><th>${t('wed')}</th><th>${t('thu')}</th><th>${t('fri')}</th></tr></thead>
             <tbody>
-              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">08:00–09:15</td><td></td><td><div class="ss"><div class="sc2">MATH201 · Calculus (лекция)</div><div class="sr">Ауд.205 · Akhmetov B.</div></div></td><td></td><td><div class="ss"><div class="sc2">MATH201 · Calculus (лекция)</div><div class="sr">Ауд.205</div></div></td><td></td></tr>
-              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">09:30–10:45</td><td><div class="ss"><div class="sc2">CS101 · Intro to CS (лекция)</div><div class="sr">Ауд.301 · Dariya Y.</div></div></td><td></td><td><div class="ss"><div class="sc2">CS101 · Intro to CS (лекция)</div><div class="sr">Ауд.301</div></div></td><td></td><td></td></tr>
-              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">11:00–12:15</td><td><div class="ss"><div class="sc2">PHY101 · Physics</div><div class="sr">Ауд.118 · Bekova A.</div></div></td><td></td><td></td><td></td><td><div class="ss"><div class="sc2">PHY101 · Physics</div><div class="sr">Ауд.118</div></div></td></tr>
-              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap;padding:8px 13px">12:30–13:45</td><td colspan="5" style="text-align:center;color:var(--muted);font-size:11px;opacity:.4">— Обед —</td></tr>
-              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">14:00–15:15</td><td></td><td></td><td><div class="ss"><div class="sc2">OG101 · Oil & Gas 101</div><div class="sr">Ауд.210 · Seitkali N.</div></div></td><td></td><td></td></tr>
-              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">15:30–16:45</td><td><div class="ss"><div class="sc2">CS101 · практ.</div><div class="sr">Ауд.301</div></div></td><td></td><td><div class="ss"><div class="sc2">MATH201 · практ.</div><div class="sr">Ауд.205</div></div></td><td></td><td></td></tr>
+              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">08:00–09:15</td><td></td><td><div class="ss"><div class="sc2">MATH201 · Calculus (${LEC})</div><div class="sr">${RM}205 · Akhmetov B.</div></div></td><td></td><td><div class="ss"><div class="sc2">MATH201 · Calculus (${LEC})</div><div class="sr">${RM}205</div></div></td><td></td></tr>
+              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">09:30–10:45</td><td><div class="ss"><div class="sc2">CS101 · Intro to CS (${LEC})</div><div class="sr">${RM}301 · Dariya Y.</div></div></td><td></td><td><div class="ss"><div class="sc2">CS101 · Intro to CS (${LEC})</div><div class="sr">${RM}301</div></div></td><td></td><td></td></tr>
+              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">11:00–12:15</td><td><div class="ss"><div class="sc2">PHY101 · Physics</div><div class="sr">${RM}118 · Bekova A.</div></div></td><td></td><td></td><td></td><td><div class="ss"><div class="sc2">PHY101 · Physics</div><div class="sr">${RM}118</div></div></td></tr>
+              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap;padding:8px 13px">12:30–13:45</td><td colspan="5" style="text-align:center;color:var(--muted);font-size:11px;opacity:.4">— ${t('lunch')} —</td></tr>
+              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">14:00–15:15</td><td></td><td></td><td><div class="ss"><div class="sc2">OG101 · Oil & Gas 101</div><div class="sr">${RM}210 · Seitkali N.</div></div></td><td></td><td></td></tr>
+              <tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">15:30–16:45</td><td><div class="ss"><div class="sc2">CS101 · ${PR}</div><div class="sr">${RM}301</div></div></td><td></td><td><div class="ss"><div class="sc2">MATH201 · ${PR}</div><div class="sr">${RM}205</div></div></td><td></td><td></td></tr>
             </tbody>
           </table>
         </div>
@@ -1078,24 +1137,22 @@
         <div id="p-gr" class="pane on">
           <div class="tw"><table>
             <thead><tr><th>${t('discipline')}</th><th>${t('cred')}</th><th>${t('rk1')}</th><th>${t('rk2')}</th><th>${t('exam')}</th><th>${t('grade')}</th></tr></thead>
-            <tbody>${MARKS.map(m=>{const g=computeGrade(m.rk1,m.rk2,m.exam);return `<tr><td><div class="cn">${m.course}</div><div class="cc">${m.code}</div></td><td style="color:var(--muted)">${m.credits}</td><td style="color:var(--muted)">${m.rk1||'—'}</td><td style="color:var(--muted)">${m.rk2||'—'}</td><td style="color:var(--muted)">${m.exam||'—'}</td><td><span class="bd3 ${gc(g)}">${g}</span></td></tr>`}).join('')}</tbody>
+            <tbody>${MARKS.map(m=>{const g=m.admitted===false?'F':computeGrade(m.rk1,m.rk2,m.exam);return `<tr><td><div class="cn">${m.course}</div><div class="cc">${m.code}${m.admitted===false?` · <span style="color:#e5484d">${t('not_admitted')}</span>`:''}</div></td><td style="color:var(--muted)">${m.credits}</td><td style="color:var(--muted)">${m.rk1||'—'}</td><td style="color:var(--muted)">${m.rk2||'—'}</td><td style="color:var(--muted)">${m.exam||'—'}</td><td><span class="bd3 ${gc(g)}">${g}</span></td></tr>`}).join('')}</tbody>
           </table></div>
         </div>
         <div id="p-tr2" class="pane">
           <div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px">
             <div style="font-size:15px;font-weight:600;margin-bottom:3px">=== Transcript for ${CU.fn} ${CU.ln} ===</div>
             <div style="font-size:12px;color:var(--muted);margin-bottom:14px">GPA: ${CU.gpa??'—'} · Credits: ${totalCredits}</div>
-            ${MARKS.map(m=>({...m,g:computeGrade(m.rk1,m.rk2,m.exam)})).filter(m=>m.g!=='—').map(m=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border)"><div>Course: ${m.course} (${m.credits} cr)</div><span class="bd3 ${gc(m.g)}">${m.g}</span></div>`).join('')}
+            ${MARKS.map(m=>({...m,g:m.admitted===false?'F':computeGrade(m.rk1,m.rk2,m.exam)})).filter(m=>m.g!=='—').map(m=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border)"><div>Course: ${m.course} (${m.credits} cr)</div><span class="bd3 ${gc(m.g)}">${m.g}</span></div>`).join('')}
           </div>
           <button class="btn" onclick="toast('${t('download_pdf')} ✓')">${t('download_pdf')}</button>
         </div>
         <div id="p-at" class="pane">
           <div class="tw"><table>
-            <thead><tr><th>${t('discipline')}</th><th>${t('attended')}</th><th>${t('missed')}</th><th>%</th></tr></thead>
+            <thead><tr><th>${t('discipline')}</th><th>${t('attended')}</th><th>${t('missed')}</th><th>%</th><th>${t('admission')}</th></tr></thead>
             <tbody>
-              <tr><td>Intro to CS</td><td style="color:var(--muted)">12</td><td style="color:var(--muted)">0</td><td><span class="bd3 ga">100%</span></td></tr>
-              <tr><td>Calculus</td><td style="color:var(--muted)">10</td><td style="color:var(--muted)">2</td><td><span class="bd3 gb">83%</span></td></tr>
-              <tr><td>Physics</td><td style="color:var(--muted)">8</td><td style="color:var(--muted)">4</td><td><span class="bd3 gc">67%</span></td></tr>
+              ${ATTEND.length?ATTEND.map(a=>{const p=Number(a.percent);const cls=p>=75?'ga':p>=50?'gb':p>=30?'gc':'gf';return `<tr><td><div class="cn">${a.course}</div><div class="cc">${a.code}</div></td><td style="color:var(--muted)">${a.attended}</td><td style="color:var(--muted)">${a.missed}</td><td><span class="bd3 ${cls}">${p}%</span></td><td>${a.admitted?`<span style="color:var(--muted)">${t('admitted')}</span>`:`<span style="color:#e5484d">${t('not_admitted')}</span>`}</td></tr>`}).join(''):`<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:20px">${t('no_attendance')}</td></tr>`}
             </tbody>
           </table></div>
         </div>
@@ -1105,34 +1162,35 @@
     // ── RESEARCH ─────────────────────────────────────
     function renderResearch(){
       const hidx=CU.hindex??4;
+      const totalCit=PAPERS.reduce((a,p)=>a+p.cite,0);
       setC(`
-        <div class="pt">Исследования</div>
-        <div class="ps">Статьи, проекты, h-индекс</div>
+        <div class="pt">${t('research')}</div>
+        <div class="ps">${t('research_sub')}</div>
         <div class="hc">
           <div class="hn">${hidx}</div>
-          <div class="hi"><h3>H-индекс</h3><p>${hidx} статей с ${hidx}+ цитированиями<br>Всего: ${PAPERS.reduce((a,p)=>a+p.cite,0)} цитирований</p></div>
+          <div class="hi"><h3>${t('h_index')}</h3><p>${t('hindex_papers').replace(/{n}/g,hidx)}<br>${t('total_citations').replace(/{n}/g,totalCit)}</p></div>
           <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
-            <div class="mc" style="padding:10px 14px;text-align:center"><div class="ml">Статей</div><div class="mv" style="font-size:20px">${PAPERS.length}</div></div>
-            <div class="mc" style="padding:10px 14px;text-align:center"><div class="ml">Проектов</div><div class="mv" style="font-size:20px">2</div></div>
+            <div class="mc" style="padding:10px 14px;text-align:center"><div class="ml">${t('papers_label')}</div><div class="mv" style="font-size:20px">${PAPERS.length}</div></div>
+            <div class="mc" style="padding:10px 14px;text-align:center"><div class="ml">${t('projects')}</div><div class="mv" style="font-size:20px">2</div></div>
           </div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <div style="font-size:13px;font-weight:500">Мои статьи</div>
+          <div style="font-size:13px;font-weight:500">${t('my_papers')}</div>
           <div style="display:flex;gap:6px">
-            <select onchange="sortPapers(this.value)"><option value="cite">По цитированиям</option><option value="date">По дате</option></select>
-            <button class="btn-sm" onclick="openAddPaper()">+ Добавить</button>
+            <select onchange="sortPapers(this.value)"><option value="cite">${t('by_citations')}</option><option value="date">${t('by_date')}</option></select>
+            <button class="btn-sm" onclick="openAddPaper()">${t('add_short')}</button>
           </div>
         </div>
         <div id="ptable">${paperTable()}</div>
         <div style="margin-top:18px">
-          <div style="font-size:13px;font-weight:500;margin-bottom:10px">Журналы · Подписки</div>
+          <div style="font-size:13px;font-weight:500;margin-bottom:10px">${t('journals_subs')}</div>
           <div class="tw"><table>
-            <thead><tr><th>Журнал</th><th>Статей</th><th>Статус</th><th></th></tr></thead>
+            <thead><tr><th>${t('journal_col')}</th><th>${t('papers_label')}</th><th>${t('status')}</th><th></th></tr></thead>
             <tbody>
               ${(JOURNALS.length?JOURNALS:[{name:'Journal of CS',papers:1,subscribed:false},{name:'Journal of AI',papers:3,subscribed:false},{name:'Central Asian Ecology Review',papers:12,subscribed:false}]).map(j=>`
                 <tr><td>${j.name}</td><td style="color:var(--muted)">${j.papers}</td>
-                <td><span class="bd3 ${j.subscribed||jrnSubs.includes(j.name)?'ga':'gn'}">${j.subscribed||jrnSubs.includes(j.name)?'Подписан':'—'}</span></td>
-                <td><button class="btn-sm" onclick="subJournal('${j.name.replace(/'/g,"\\'")}','${j.name.replace(/'/g,"\\'")}')">Подписаться</button></td></tr>`).join('')}
+                <td><span class="bd3 ${j.subscribed||jrnSubs.includes(j.name)?'ga':'gn'}">${j.subscribed||jrnSubs.includes(j.name)?t('subscribed'):'—'}</span></td>
+                <td><button class="btn-sm" onclick="subJournal('${j.name.replace(/'/g,"\\'")}','${j.name.replace(/'/g,"\\'")}')">${t('subscribe_btn')}</button></td></tr>`).join('')}
             </tbody>
           </table></div>
         </div>
@@ -1141,7 +1199,7 @@
 
     function paperTable(){
       return `<div class="tw"><table>
-        <thead><tr><th>Название</th><th>Журнал</th><th>Дата</th><th>Цит.</th><th>Формат</th></tr></thead>
+        <thead><tr><th>${t('title_col')}</th><th>${t('journal_col')}</th><th>${t('date')}</th><th>${t('citations_col')}</th><th>${t('format_col')}</th></tr></thead>
         <tbody>${PAPERS.map(p=>`
           <tr>
             <td><div class="cn">${p.title}</div><div class="cc">doi:${p.doi}</div></td>
@@ -1169,32 +1227,32 @@
       const plain=`${title}. ${journal}, ${year}. doi:${doi}`;
       const bibtex=`@article{ref${year},\n  title={${title}},\n  journal={${journal}},\n  year={${year}},\n  doi={${doi}}\n}`;
       const txt=fmt==='bibtex'?bibtex:plain;
-      showModal(`<h2>Цитирование — ${fmt==='bibtex'?'BibTeX':'Plain Text'}</h2>
+      showModal(`<h2>${t('cite_title')} — ${fmt==='bibtex'?'BibTeX':'Plain Text'}</h2>
         <div style="background:var(--bg);border-radius:8px;padding:14px;font-size:12px;color:var(--muted);white-space:pre-wrap;font-family:monospace;line-height:1.6">${txt}</div>
-        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">Закрыть</button>
-        <button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(\`${txt.replace(/`/g,"'")}\`);toast('Скопировано!')">Копировать</button></div>`);
+        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">${t('close')}</button>
+        <button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(\`${txt.replace(/`/g,"'")}\`);toast('${t('copied')}')">${t('copy')}</button></div>`);
     }
 
     function openAddPaper(){
-      showModal(`<h2>Добавить статью</h2>
-        <div class="fr"><label class="fl3">Название</label><input class="fi" id="pt" placeholder="Название статьи"></div>
-        <div class="fr"><label class="fl3">Журнал</label><input class="fi" id="pj" placeholder="Journal name"></div>
+      showModal(`<h2>${t('add_paper_title')}</h2>
+        <div class="fr"><label class="fl3">${t('title_col')}</label><input class="fi" id="pt" placeholder="${t('title_ph')}"></div>
+        <div class="fr"><label class="fl3">${t('journal_col')}</label><input class="fi" id="pj" placeholder="Journal name"></div>
         <div class="fr"><label class="fl3">DOI</label><input class="fi" id="pd" placeholder="10.xxxx/xxx"></div>
-        <div class="fr"><label class="fl3">Дата (YYYY-MM)</label><input class="fi" id="pdate" placeholder="2026-05"></div>
-        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">Отмена</button>
-        <button class="btn" onclick="addPaper()">Добавить</button></div>`);
+        <div class="fr"><label class="fl3">${t('date')} (YYYY-MM)</label><input class="fi" id="pdate" placeholder="2026-05"></div>
+        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">${t('cancel')}</button>
+        <button class="btn" onclick="addPaper()">${t('add_btn')}</button></div>`);
     }
 
     async function addPaper(){
-      const t=document.getElementById('pt').value;
-      if(!t){toast('Введите название');return;}
+      const title=document.getElementById('pt').value;
+      if(!title){toast(t('enter_title'));return;}
       const journal=document.getElementById('pj').value||'Unknown';
       const doi=document.getElementById('pd').value||'';
       const date=document.getElementById('pdate').value||'2026-05';
-      const res=await API.post('/api/add-paper',{email:CU.email,title:t,journal,doi,pages:1});
-      if(res&&res.ok){await loadAllData();toast('✓ Статья добавлена! Новость опубликована автоматически.');}
-      else if(res&&res.error){toast('Ошибка: '+res.error);return;}
-      else{PAPERS.unshift({title:t,journal,doi,date,cite:0});toast('✓ Статья добавлена (offline)');}
+      const res=await API.post('/api/add-paper',{email:CU.email,title,journal,doi,pages:1});
+      if(res&&res.ok){await loadAllData();toast(t('paper_added'));}
+      else if(res&&res.error){toast(t('error_word')+': '+res.error);return;}
+      else{PAPERS.unshift({title,journal,doi,date,cite:0});toast('✓ (offline)');}
       closeModal();renderResearch();
     }
 
@@ -1257,7 +1315,7 @@
           <div class="mav">${initials}</div>
           <div style="flex:1;min-width:0">
             <div class="mf" style="font-size:12.5px">${c.name}</div>
-            <div class="mt2" style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${last?(last.from===CU.email?'Вы: ':'')+last.text:'—'}</div>
+            <div class="mt2" style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${last?(last.from===CU.email?t('you_prefix')+': ':'')+last.text:'—'}</div>
           </div>
         </div>`}).join('');
       if(matchedNew.length)html+=`<div style="padding:6px 12px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:6px">${t('new_chat')}</div>`;
@@ -1353,7 +1411,7 @@
           </div>
           <div style="display:flex;flex-direction:column;gap:9px">
             <div style="font-size:12px;font-weight:500;margin-bottom:4px">${t('quick_links')}</div>
-            ${['🏫 Академический портал','📚 Библиотека KBTU','🔬 Research Hub','📋 Расписание','⚙ Тех. поддержка'].map(l=>`<div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;font-size:12.5px;font-weight:500">${l}</div>`).join('')}
+            ${['🏫 '+t('footer_portal'),'📚 '+t('footer_library'),'🔬 '+t('footer_research'),'📋 '+t('schedule'),'⚙ '+t('tech')].map(l=>`<div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;font-size:12.5px;font-weight:500">${l}</div>`).join('')}
           </div>
         </div>
       `);
@@ -1443,73 +1501,80 @@
     function openSendMessage(){
       const others=USERLIST.filter(u=>u.email!==CU.email);
       const opts=(others.length?others:[{email:'prof@kbtu.kz',name:'Dariya Yergaliyeva',role:'Teacher'},{email:'admin@kbtu.kz',name:'Admin KBTU',role:'Admin'},{email:'manager@kbtu.kz',name:'Dana Nurlanovna',role:'Manager'}]).map(u=>`<option value="${u.email}">${u.name} [${u.role}]</option>`).join('');
-      showModal(`<h2>Написать сообщение</h2>
-        <div class="fr"><label class="fl3">Кому</label>
+      showModal(`<h2>${t('send_msg_title')}</h2>
+        <div class="fr"><label class="fl3">${t('recipient_lbl')}</label>
           <select class="fi" id="sm-to">${opts}</select>
         </div>
-        <div class="fr"><label class="fl3">Сообщение</label><textarea class="fi" id="sm-text" rows="4" placeholder="Текст сообщения..."></textarea></div>
-        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">Отмена</button>
-        <button class="btn" onclick="submitMessage()">Отправить</button></div>`);
+        <div class="fr"><label class="fl3">${t('msg_lbl')}</label><textarea class="fi" id="sm-text" rows="4" placeholder="${t('msg_text_ph')}"></textarea></div>
+        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">${t('cancel')}</button>
+        <button class="btn" onclick="submitMessage()">${t('send_btn')}</button></div>`);
     }
 
     async function submitMessage(){
       const toEmail=document.getElementById('sm-to').value;
       const text=document.getElementById('sm-text').value;
-      if(!text.trim()){toast('Введите текст сообщения');return;}
+      if(!text.trim()){toast(t('enter_text'));return;}
       await API.post('/api/send-message',{email:CU.email,toEmail,text});
-      closeModal();toast('✓ Сообщение отправлено!');
+      closeModal();toast(t('sent_ok'));
     }
 
     function openRateTeacher(){
-      showModal(`<h2>Оценить преподавателя</h2>
+      showModal(`<h2>${t('rate_title')}</h2>
         <div style="font-size:13px;margin-bottom:16px">1. Dariya Yergaliyeva [PROFESSOR] rating=10.0</div>
-        <div class="fr"><label class="fl3">Rating (1-10)</label><input class="fi" id="rv" type="number" min="1" max="10" placeholder="10"></div>
-        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">Отмена</button>
-        <button class="btn" onclick="submitRating()">Оценить</button></div>`);
+        <div class="fr"><label class="fl3">${t('rating_lbl')}</label><input class="fi" id="rv" type="number" min="1" max="10" placeholder="10"></div>
+        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">${t('cancel')}</button>
+        <button class="btn" onclick="submitRating()">${t('save')}</button></div>`);
     }
 
     async function submitRating(){
       const v=document.getElementById('rv').value;
-      if(!v||v<1||v>10){toast('Введите от 1 до 10');return;}
+      if(!v||v<1||v>10){toast(t('rating_lbl'));return;}
       const res=await API.post('/api/rate-teacher',{email:CU.email,teacherEmail:'prof@kbtu.kz',rating:v});
       closeModal();
-      if(res&&res.ok)toast(`✓ ${CU.fn} rated Dariya: ${v} (новый рейтинг ${res.newRating})`);
-      else toast(`✓ ${CU.fn} rated Dariya: ${v}`);
+      if(res&&res.ok)toast(`${t('rated_ok')}: ${v} (${t('rating')} ${res.newRating})`);
+      else toast(`${t('rated_ok')}: ${v}`);
     }
 
     function openComplaint(){
       const students=USERLIST.filter(u=>u.role==='Student'||u.role==='GraduateStudent');
       const opts=(students.length?students:[{email:'student@kbtu.kz',name:'Bek Erlepes'},{email:'grad@kbtu.kz',name:'Asel Nurova'}]).map(s=>`<option value="${s.email}">${s.name}</option>`).join('');
-      showModal(`<h2>Жалоба декану</h2>
-        <div class="fr"><label class="fl3">Студент</label><select class="fi" id="cmp-st">${opts}</select></div>
-        <div class="fr"><label class="fl3">Срочность</label><select class="fi" id="cmp-ur"><option>LOW</option><option>MEDIUM</option><option>HIGH</option></select></div>
-        <div class="fr"><label class="fl3">Описание</label><textarea class="fi" id="cmp-d" rows="3" placeholder="Опишите ситуацию..."></textarea></div>
-        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">Отмена</button>
-        <button class="btn" onclick="submitComplaint()">Отправить</button></div>`);
+      showModal(`<h2>${t('complaint_title')}</h2>
+        <div class="fr"><label class="fl3">${t('student_lbl')}</label><select class="fi" id="cmp-st">${opts}</select></div>
+        <div class="fr"><label class="fl3">${t('urgency_lbl')}</label><select class="fi" id="cmp-ur"><option>LOW</option><option>MEDIUM</option><option>HIGH</option></select></div>
+        <div class="fr"><label class="fl3">${t('msg_lbl')}</label><textarea class="fi" id="cmp-d" rows="3" placeholder="${t('msg_text_ph')}"></textarea></div>
+        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">${t('cancel')}</button>
+        <button class="btn" onclick="submitComplaint()">${t('send_btn')}</button></div>`);
     }
 
     async function submitComplaint(){
       const studentEmail=document.getElementById('cmp-st').value;
       const urgency=document.getElementById('cmp-ur').value;
       await API.post('/api/send-complaint',{email:CU.email,studentEmail,urgency});
-      closeModal();toast('✓ Complaint sent to dean');
+      closeModal();toast(t('sent_ok'));
     }
 
-    function openPutMark(){
+    async function openPutMark(){
       const myCourses=COURSES.filter(c=>(c.teacher||'').includes(CU.fn));
       const courseList=(myCourses.length?myCourses:COURSES).map(c=>`<option value="${c.id}">${c.id} · ${c.name}</option>`).join('');
-      const students=USERLIST.filter(u=>u.role==='Student'||u.role==='GraduateStudent');
-      const stOpts=(students.length?students:[{email:'student@kbtu.kz',name:'Bek Erlepes'}]).map(s=>`<option value="${s.email}">${s.name}</option>`).join('');
-      showModal(`<h2>Выставить оценку</h2>
-        <div class="fr"><label class="fl3">Курс</label><select class="fi" id="pm-c">${courseList}</select></div>
-        <div class="fr"><label class="fl3">Студент</label><select class="fi" id="pm-s">${stOpts}</select></div>
+      showModal(`<h2>${t('qa_put_mark')}</h2>
+        <div class="fr"><label class="fl3">${t('course_lbl')}</label><select class="fi" id="pm-c" onchange="loadMarkStudents()">${courseList}</select></div>
+        <div class="fr"><label class="fl3">${t('student_lbl')}</label><select class="fi" id="pm-s"></select></div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-          <div class="fr"><label class="fl3">РК1</label><input class="fi" id="pm-a1" type="number" placeholder="0-100"></div>
-          <div class="fr"><label class="fl3">РК2</label><input class="fi" id="pm-a2" type="number" placeholder="0-100"></div>
-          <div class="fr"><label class="fl3">Экзамен</label><input class="fi" id="pm-fe" type="number" placeholder="0-100"></div>
+          <div class="fr"><label class="fl3">${t('rk1')} (0-30)</label><input class="fi" id="pm-a1" type="number" placeholder="0-30"></div>
+          <div class="fr"><label class="fl3">${t('rk2')} (0-30)</label><input class="fi" id="pm-a2" type="number" placeholder="0-30"></div>
+          <div class="fr"><label class="fl3">${t('exam')} (0-40)</label><input class="fi" id="pm-fe" type="number" placeholder="0-40"></div>
         </div>
-        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">Отмена</button>
-        <button class="btn" onclick="submitMark()">Сохранить</button></div>`);
+        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">${t('cancel')}</button>
+        <button class="btn" onclick="submitMark()">${t('save')}</button></div>`);
+      loadMarkStudents();
+    }
+
+    async function loadMarkStudents(){
+      const sel=document.getElementById('pm-c'); if(!sel)return;
+      const students=await API.get('/api/course-students',{courseId:sel.value});
+      const dd=document.getElementById('pm-s');
+      if(Array.isArray(students)&&students.length)dd.innerHTML=students.map(s=>`<option value="${s.email}">${s.name}</option>`).join('');
+      else dd.innerHTML=`<option value="">${t('no_one_found')}</option>`;
     }
 
     async function submitMark(){
@@ -1520,45 +1585,82 @@
       const fe=document.getElementById('pm-fe').value||0;
       const res=await API.post('/api/put-mark',{email:CU.email,courseId,studentEmail,a1,a2,fe});
       closeModal();
-      if(res&&res.ok)toast(`✓ Mark saved: ${res.grade} (${res.total})`);
-      else if(res&&res.error)toast('Ошибка: '+res.error);
-      else toast('✓ Mark saved successfully');
+      if(res&&res.ok&&res.admitted===false)toast(`⚠ ${t('not_admitted_toast')} (${res.reason}). ${t('grade')}: F`);
+      else if(res&&res.ok)toast(`${t('saved_ok')}: ${res.grade} (${res.total})`);
+      else if(res&&res.error)toast(res.error);
+      else toast(t('saved_ok'));
+      if(res&&res.ok&&typeof loadAllData==='function')await loadAllData();
+    }
+
+    async function openMarkAttendance(){
+      const myCourses=COURSES.filter(c=>(c.teacher||'').includes(CU.fn));
+      const courseList=(myCourses.length?myCourses:COURSES).map(c=>`<option value="${c.id}">${c.id} · ${c.name}</option>`).join('');
+      const today=new Date().toISOString().slice(0,10);
+      showModal(`<h2>${t('mark_attendance')}</h2>
+        <div class="fr"><label class="fl3">${t('courses')}</label><select class="fi" id="ma-c" onchange="loadAttStudents()">${courseList}</select></div>
+        <div class="fr"><label class="fl3">${t('date')}</label><input class="fi" id="ma-d" type="date" value="${today}"></div>
+        <div id="ma-list" style="max-height:240px;overflow:auto;margin:8px 0"></div>
+        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">${t('cancel')}</button>
+        <button class="btn" onclick="submitAttendance()">${t('save')}</button></div>`);
+      loadAttStudents();
+    }
+
+    async function loadAttStudents(){
+      const sel=document.getElementById('ma-c'); if(!sel)return;
+      const students=await API.get('/api/course-students',{courseId:sel.value});
+      const list=document.getElementById('ma-list');
+      if(!Array.isArray(students)||!students.length){list.innerHTML=`<div style="color:var(--muted);padding:10px">${t('no_one_found')}</div>`;return;}
+      list.innerHTML=students.map(s=>`<label style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--border)"><span>${s.name}</span><input type="checkbox" class="ma-st" data-email="${s.email}" checked></label>`).join('');
+    }
+
+    async function submitAttendance(){
+      const courseId=document.getElementById('ma-c').value;
+      const date=document.getElementById('ma-d').value||new Date().toISOString().slice(0,10);
+      const boxes=[...document.querySelectorAll('.ma-st')];
+      if(!boxes.length){toast(t('no_one_found'));return;}
+      for(const b of boxes){
+        await API.post('/api/mark-attendance',{email:CU.email,courseId,studentEmail:b.dataset.email,date,present:b.checked});
+      }
+      closeModal();toast('✓ '+t('att_saved'));
+      if(typeof loadAllData==='function')await loadAllData();
     }
 
     function openSubJournal(){
-      showModal(`<h2>Подписаться на журнал</h2>
-        <div class="fr"><label class="fl3">Журнал</label>
+      showModal(`<h2>${t('subscribe_title')}</h2>
+        <div class="fr"><label class="fl3">${t('journal_lbl')}</label>
           <select class="fi" id="jsel">
             <option value="Journal of CS">1. Journal of CS · 1 papers</option>
             <option value="Journal of AI">2. Journal of AI · 3 papers</option>
             <option value="CAE">3. Central Asian Ecology Review</option>
           </select>
         </div>
-        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">Отмена</button>
-        <button class="btn" onclick="doSub()">Подписаться</button></div>`);
+        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">${t('cancel')}</button>
+        <button class="btn" onclick="doSub()">${t('subscribe_btn')}</button></div>`);
     }
 
     function doSub(){
       const j=document.getElementById('jsel').value;
       if(!jrnSubs.includes(j))jrnSubs.push(j);
-      closeModal();toast(`✓ Subscribed to journal: ${j}`);
+      closeModal();toast(`${t('subscribed_ok')}: ${j}`);
     }
 
     function openNewRequest(){
-      showModal(`<h2>Новая заявка</h2>
-        <div class="fr"><label class="fl3">Опишите проблему</label><textarea class="fi" rows="4" id="rdesc" placeholder="Describe the problem..."></textarea></div>
-        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">Отмена</button>
-        <button class="btn" onclick="submitReq()">Отправить</button></div>`);
+      showModal(`<h2>${t('new_req_title')}</h2>
+        <div class="fr"><label class="fl3">${t('problem_lbl')}</label><textarea class="fi" rows="4" id="rdesc" placeholder="${t('problem_lbl')}..."></textarea></div>
+        <div class="mbtns"><button class="btn-cancel" onclick="closeModal()">${t('cancel')}</button>
+        <button class="btn" onclick="submitReq()">${t('send_btn')}</button></div>`);
     }
 
     async function submitReq(){
       const d=document.getElementById('rdesc').value;
-      if(!d){toast('Опишите проблему');return;}
+      if(!d){toast(t('problem_lbl'));return;}
       const res=await API.post('/api/new-request',{email:CU.email,desc:d});
-      if(res&&res.ok){await loadAllData();toast('✓ Заявка отправлена');}
-      else{const id='#TK-'+(1060+REQUESTS.length);REQUESTS.unshift({id,desc:d,date:'2026-05-18',status:'snew',st:'Новая'});toast('✓ Заявка отправлена (offline)');}
+      if(res&&res.ok){await loadAllData();toast(t('sent_ok'));}
+      else{const id='#TK-'+(1060+REQUESTS.length);REQUESTS.unshift({id,desc:d,date:'2026-05-18',status:'snew',st:t('new_lc')});toast(t('sent_ok'));}
       closeModal();renderTech();
     }
+
+    syncLangUI();
 </script>
 </body>
 </html>

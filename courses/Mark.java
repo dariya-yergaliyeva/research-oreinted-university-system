@@ -22,10 +22,10 @@ public class Mark implements Serializable{
         double att = firstAttestation + secondAttestation;
         if (firstAttestation == 0 && secondAttestation == 0 && finalExam == 0) return "—";
         if (finalExam == 0) {
-            if (firstAttestation > 0 && secondAttestation > 0 && att < 29.5) return "F";
+            if (firstAttestation > 0 && secondAttestation > 0 && att < 30) return "F";
             return "—";
         }
-        if (att < 29.5) return "F";
+        if (att < 30) return "F";
         if (finalExam < 9.5) return "R";
         if (finalExam <= 19.5) return "FX";
         double total = getTotalMark();
